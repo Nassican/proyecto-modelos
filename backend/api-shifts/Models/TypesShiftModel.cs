@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace api_shifts.Models;
 
-public partial class TypesShift
+public partial class TypesShiftModel
 {
     public int Id { get; set; }
 
@@ -15,5 +15,5 @@ public partial class TypesShift
 
     public virtual ICollection<ShiftModel> Shifts { get; set; } = new List<ShiftModel>();
 
-    public virtual ICollection<User> Users { get; set; } = new List<User>();
+    public virtual ICollection<UserModel> Users { get; set; } = new List<UserModel>();
 }

@@ -1,34 +1,33 @@
 create table clients (
-    id serial primary key,
+    id int primary key identity,
     name varchar(256) not null,
     student_code varchar(9) not null
 );
 
 create table types_shifts (
-    id serial primary key,
+    id int primary key identity,
     name varchar(50) not null,
     code varchar(2) not null,
-    is_active boolean not null default true
+    is_active bit not null default 1
 );
 
 create table users (
-    id serial primary key,
+    id int primary key identity,
     username varchar(100) not null,
     password varchar(256) not null,
     email varchar(100) not null,
     id_type_shift int not null references types_shifts(id),
-    is_active boolean not null default true
+    is_active bit not null default 1
 );
 
 create table shifts (
-    id serial primary key,
+    id int primary key identity,
     num_shift varchar(10) not null,
-    date date,
-    hour time,
-    is_attended boolean,
+    date_attended datetime,
+    is_attended bit,
     id_type_shift int not null references types_shifts(id),
     id_client int not null references clients(id),
     id_user int not null references users(id),
-    at_created date not null default CURRENT_DATE,
-    is_active boolean not null default true
+    at_created datetime not null default current_timestamp,
+    is_active bit not null default 1
 );

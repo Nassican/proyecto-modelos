@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace api_shifts.Models;
 
-public partial class User
+public partial class UserModel
 {
     public int Id { get; set; }
 

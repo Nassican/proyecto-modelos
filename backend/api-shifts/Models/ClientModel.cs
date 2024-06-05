@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace api_shifts.Models;
 
-public partial class Client
+public partial class ClientModel
 {
     public int Id { get; set; }
 
@@ -11,5 +11,5 @@ public partial class Client
 
     public string StudentCode { get; set; } = null!;
 
-    public virtual ICollection<Shift> Shifts { get; set; } = new List<Shift>();
+    public virtual ICollection<ShiftModel> Shifts { get; set; } = new List<ShiftModel>();
 }
