@@ -6,7 +6,7 @@ public class ShiftDto
 {
     public int Id { get; set; }
 
-    public string NumShift { get; set; } = null!;
+    public string NumShift { get; set; }
 
     public DateTime? DateAttended { get; set; }
 
@@ -19,6 +19,4 @@ public class ShiftDto
     public int IdUser { get; set; }
 
     public DateTime AtCreated { get; set; }
-
-    // public bool IsActive { get; set; }
 }
