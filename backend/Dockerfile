@@ -1,19 +1,18 @@
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+FROM mcr.microsoft.com/dotnet/sdk:8.0
 WORKDIR /app
-EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
-COPY ["MyBackend/MyBackend.csproj", "MyBackend/"]
-RUN dotnet restore "MyBackend/MyBackend.csproj"
-COPY . .
-WORKDIR "/src/MyBackend"
-RUN dotnet build "MyBackend.csproj" -c Release -o /app/build
+# Copiar y restaurar dependencias
+COPY api-shifts/*.csproj ./
+RUN dotnet restore
 
-FROM build AS publish
-RUN dotnet publish "MyBackend.csproj" -c Release -o /app/publish
+# Copiar todo el código
+COPY api-shifts/. ./
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "MyBackend.dll"]
+# Instalar Entity Framework Core tools
+RUN dotnet tool install --global dotnet-ef
+
+# Exponer el puerto
+EXPOSE 5246
+
+# Ejecutar en modo de desarrollo con hot-reload
+ENTRYPOINT ["dotnet", "run", "--project", "api-shifts.csproj", "--urls", "http://0.0.0.0:5246"]
