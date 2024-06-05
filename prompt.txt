@@ -1,0 +1,86 @@
+1. Hola tengo un proyecto con la siguiente estructura de carpetas:
+
+|--backend/
+|--database/
+|  |--init.sql
+|--frontend/
+|--.env
+|--.env.example
+|--.gitignore
+|--docker-compose.yml
+|--README.md
+
+2. Dentro de la carpeta backend/ tengo esta estructura:
+
+|--api-shifts/
+|--api-shifts.sln
+|--Dockerfile
+
+El backend esta hecho con .net core 8
+
+La carpeta de api-shifts/ tiene esta estructura:
+
+|--Controllers/
+|--Data/
+|--Dtos/
+|--Models/
+|--Properties/
+|--api-shifts.csproj
+|--api-shifts.http
+|--appsettings.Development.json
+|--appsettings.json
+|--Program.cs
+|--WeatherForecast.cs
+
+3. Dentro de la carpeta frontend/ tengo esta estructura:
+
+|--.next/
+|--node_modules/
+|--public/
+|--src/
+|--.eslintrc.json
+|--.gitignore
+|--components.json
+|--Dockerfile
+|--next-env.d.ts
+|--next.config.mjs
+|--package-lock.json
+|--package.json
+|--postcss.config.mjs
+|--README.md
+|--tailwind.config.ts
+|--tsconfig.json
+
+El frontend esta hecho con NextJS usando la libreria de comoponentes shadcn
+
+4. PETICION: Necesito que hagas los Dockerfile correspondiente a cada carpeta, los recursos que voy a necesitar es el backend, el frontend y la base de datos, la base de datos debe ser en sql server y las tablas se deben generar al iniciar el proyecto con docker compose usando el archivo init.sql que esta dentro de la carpeta database
+
+5. VALORES ADICIONALES QUE PUEDEN SERVIR:
+
+appsettings.json de api-shifts/  :
+
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost; DataBase=shiftsdb; Trusted_Connection=True; TrustServerCertificate=True;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
+}
+
+Ten en cuenta tambien este archivo:
+
+api-shifts.http de api-shifts/ :
+
+@api_shifts_HostAddress = http://localhost:5246
+
+GET {{api_shifts_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+Ten en cuenta que lo que quiero es armar los Dockerfile y docker-compose con volumenes, para ir trabajando en desarrollo
