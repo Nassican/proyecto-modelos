@@ -1,17 +1,26 @@
-create table clients (
+-- Crear la base de datos shiftsdb
+CREATE DATABASE shiftsdb;
+GO
+
+-- Usar la base de datos shiftsdb
+USE shiftsdb;
+GO
+
+-- Crear las tablas
+CREATE TABLE clients (
     id int primary key identity,
     name varchar(256) not null,
     student_code varchar(9) not null
 );
 
-create table types_shifts (
+CREATE TABLE types_shifts (
     id int primary key identity,
     name varchar(50) not null,
     code varchar(2) not null,
     is_active bit not null default 1
 );
 
-create table users (
+CREATE TABLE users (
     id int primary key identity,
     username varchar(100) not null,
     password varchar(256) not null,
@@ -20,7 +29,7 @@ create table users (
     is_active bit not null default 1
 );
 
-create table shifts (
+CREATE TABLE shifts (
     id int primary key identity,
     num_shift varchar(10) not null,
     date_attended datetime,
