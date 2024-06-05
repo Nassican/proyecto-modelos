@@ -13,43 +13,70 @@
 2. Dentro de la carpeta backend/ tengo esta estructura:
 
 |--api-shifts/
+|  |--bin/
+|  |--Controllers/
+|  |--Data/
+|  |--Dtos/
+|  |--Models/
+|  |--obj/
+|  |--Properties/
+|  |--api-shifts.csproj
+|  |--api-shifts.http
+|  |--appsettings.Development.json
+|  |--appsettings.json
+|  |--Dockerfile
+|  |--Program.cs
+|  |--WeatherForecast.cs
 |--api-shifts.sln
-|--Dockerfile
+|--.dockerignore
 
 El backend esta hecho con .net core 8
 
-La carpeta de api-shifts/ tiene esta estructura:
+Dockerfile de apishifts:
 
-|--Controllers/
-|--Data/
-|--Dtos/
-|--Models/
-|--Properties/
-|--api-shifts.csproj
-|--api-shifts.http
-|--appsettings.Development.json
-|--appsettings.json
-|--Program.cs
-|--WeatherForecast.cs
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER app
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["api-shifts/api-shifts.csproj", "api-shifts/"]
+RUN dotnet restore "./api-shifts/api-shifts.csproj"
+COPY . .
+WORKDIR "/src/api-shifts"
+RUN dotnet build "./api-shifts.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./api-shifts.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "api-shifts.dll"]
 
 3. Dentro de la carpeta frontend/ tengo esta estructura:
 
-|--.next/
-|--node_modules/
-|--public/
-|--src/
-|--.eslintrc.json
-|--.gitignore
-|--components.json
-|--Dockerfile
-|--next-env.d.ts
-|--next.config.mjs
-|--package-lock.json
-|--package.json
-|--postcss.config.mjs
-|--README.md
-|--tailwind.config.ts
-|--tsconfig.json
+|--frontend/
+|  |--.next/
+|  |--node_modules/
+|  |--public/
+|  |--src/
+|  |--.eslintrc.json
+|  |--.gitignore
+|  |--components.json
+|  |--Dockerfile
+|  |--next-env.d.ts
+|  |--next.config.mjs
+|  |--package-lock.json
+|  |--package.json
+|  |--postcss.config.mjs
+|  |--README.md
+|  |--tailwind.config.ts
+|  |--tsconfig.json
 
 El frontend esta hecho con NextJS usando la libreria de comoponentes shadcn
 
@@ -61,7 +88,7 @@ appsettings.json de api-shifts/  :
 
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost; DataBase=shiftsdb; Trusted_Connection=True; TrustServerCertificate=True;"
+    "DefaultConnection": "Server=db;Database=shiftsdb;User=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;"
   },
   "Logging": {
     "LogLevel": {
@@ -71,16 +98,5 @@ appsettings.json de api-shifts/  :
   },
   "AllowedHosts": "*"
 }
-
-Ten en cuenta tambien este archivo:
-
-api-shifts.http de api-shifts/ :
-
-@api_shifts_HostAddress = http://localhost:5246
-
-GET {{api_shifts_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
 
 Ten en cuenta que lo que quiero es armar los Dockerfile y docker-compose con volumenes, para ir trabajando en desarrollo
