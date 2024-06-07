@@ -11,5 +11,7 @@ public partial class ClientModel
 
     public string StudentCode { get; set; } = null!;
 
+    public string Email { get; set; } = null!;
+
     public virtual ICollection<ShiftModel> Shifts { get; set; } = new List<ShiftModel>();
 }

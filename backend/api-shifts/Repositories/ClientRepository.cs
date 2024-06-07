@@ -7,9 +7,9 @@ namespace api_shifts.Repositories;
 
 public class ClientRepository : IClientRepository
 {
-    private readonly ShiftsdbContext _context;
+    private readonly ShiftsDbContext _context;
     
-    public ClientRepository(ShiftsdbContext context)
+    public ClientRepository(ShiftsDbContext context)
     {
         _context = context;
     }

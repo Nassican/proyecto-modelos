@@ -7,9 +7,9 @@ namespace api_shifts.Repositories;
 
 public class ShiftRepository : IShiftRepository
 {
-    private readonly ShiftsdbContext _context;
+    private readonly ShiftsDbContext _context;
 
-    public ShiftRepository(ShiftsdbContext context)
+    public ShiftRepository(ShiftsDbContext context)
     {
         _context = context;
     }

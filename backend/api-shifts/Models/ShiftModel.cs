@@ -13,6 +13,8 @@ public partial class ShiftModel
 
     public bool? IsAttended { get; set; }
 
+    public bool IsStandby { get; set; }
+
     public int IdTypeShift { get; set; }
 
     public int IdClient { get; set; }
@@ -23,9 +25,9 @@ public partial class ShiftModel
 
     public bool IsActive { get; set; }
 
-    public virtual ClientModel IdClientNavigation { get; set; } = null!;
+    public virtual ClientModel IdClientModelNavigation { get; set; } = null!;
 
-    public virtual TypesShiftModel IdTypeShiftNavigation { get; set; } = null!;
+    public virtual TypesShiftModel IdTypeShiftModelNavigation { get; set; } = null!;
 
-    public virtual UserModel IdUserNavigation { get; set; } = null!;
+    public virtual UserModel IdUserModelNavigation { get; set; } = null!;
 }

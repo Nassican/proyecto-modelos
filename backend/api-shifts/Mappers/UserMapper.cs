@@ -13,7 +13,6 @@ public static class UserMapper
             Username = userModel.Username,
             Password = userModel.Password,
             Email = userModel.Email,
-            IdTypeShift = userModel.IdTypeShift
         };
     }
     
@@ -24,7 +23,6 @@ public static class UserMapper
             Username = userDto.Username,
             Password = userDto.Password,
             Email = userDto.Email,
-            IdTypeShift = userDto.IdTypeShift
         };
     }
 }

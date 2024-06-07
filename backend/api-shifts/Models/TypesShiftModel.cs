@@ -7,7 +7,13 @@ public partial class TypesShiftModel
 {
     public int Id { get; set; }
 
+    public string Color { get; set; } = null!;
+
+    public string Icon { get; set; } = null!;
+
     public string Name { get; set; } = null!;
+
+    public string Description { get; set; } = null!;
 
     public string Code { get; set; } = null!;
 
@@ -15,5 +21,5 @@ public partial class TypesShiftModel
 
     public virtual ICollection<ShiftModel> Shifts { get; set; } = new List<ShiftModel>();
 
-    public virtual ICollection<UserModel> Users { get; set; } = new List<UserModel>();
+    public virtual ICollection<UsersTypesShiftModel> UsersTypesShifts { get; set; } = new List<UsersTypesShiftModel>();
 }
