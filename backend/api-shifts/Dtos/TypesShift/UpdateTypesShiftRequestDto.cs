@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace api_shifts.Dtos.TypesShift;
 
-public class CreateTypesShiftRequestDto
+public class UpdateTypesShiftRequestDto
 {
     [Required]
     [Length(6, 6, ErrorMessage = "Color is hex code with 6 characters")]

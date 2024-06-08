@@ -17,4 +17,29 @@ public static class TypesShiftMapper
             Code = typesShiftModel.Code
         };
     }
+    
+    public static TypesShiftModel ToTypesShiftFromCreate(this CreateTypesShiftRequestDto typesShiftDto)
+    {
+        return new TypesShiftModel
+        {
+            Color = typesShiftDto.Color,
+            Icon = typesShiftDto.Icon,
+            Name = typesShiftDto.Name,
+            Description = typesShiftDto.Description,
+            Code = typesShiftDto.Code,
+            IsActive = true
+        };
+    }
+    
+    public static TypesShiftModel ToTypesShiftFromUpdate(this UpdateTypesShiftRequestDto typesShiftDto)
+    {
+        return new TypesShiftModel
+        {
+            Color = typesShiftDto.Color,
+            Icon = typesShiftDto.Icon,
+            Name = typesShiftDto.Name,
+            Description = typesShiftDto.Description,
+            Code = typesShiftDto.Code
+        };
+    }
 }
