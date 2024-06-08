@@ -6,7 +6,9 @@ public interface IUserRepository
 {
     Task<List<UserModel>> GetAllAsync();
     Task<UserModel?> GetByIdAsync(int id);
-    Task<UserModel> CreateAsync(UserModel user);
-    Task<UserModel?> UpdateAsync(UserModel user);
+    Task<UserModel?> GetByEmailAsync(string email);
+    Task<UserModel?> GetByUsernameAsync(string username);
+    Task<UserModel> CreateAsync(UserModel userModel);
+    Task<UserModel?> UpdateAsync(int id, UserModel userModel);
     Task<UserModel?> DeleteAsync(int id);
 }

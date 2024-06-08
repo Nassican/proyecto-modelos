@@ -16,12 +16,24 @@ public class UserRepository : IUserRepository
     
     public async Task<List<UserModel>> GetAllAsync()
     {
-        return await _context.Users.ToListAsync();
+        return await _context.Users
+            .Where(x => x.IsActive == true)
+            .ToListAsync();
     }
 
     public async Task<UserModel?> GetByIdAsync(int id)
     {
         return await _context.Users.FindAsync(id);
+    }
+
+    public async Task<UserModel?> GetByEmailAsync(string email)
+    {
+        return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+    }
+
+    public async Task<UserModel?> GetByUsernameAsync(string username)
+    {
+        return await _context.Users.FirstOrDefaultAsync(x => x.Username == username);
     }
 
     public async Task<UserModel> CreateAsync(UserModel userModel)
@@ -31,13 +43,29 @@ public class UserRepository : IUserRepository
         return userModel;
     }
 
-    public Task<UserModel> UpdateAsync(UserModel user)
+    public async Task<UserModel?> UpdateAsync(int id, UserModel userModel)
     {
-        throw new NotImplementedException();
+        var existingUser = await _context.Users
+            .FirstOrDefaultAsync(x => x.Id == id);
+        if (existingUser == null) return null;
+        
+        existingUser.Email = userModel.Email;
+        
+        await _context.SaveChangesAsync();
+        
+        return existingUser;
     }
 
-    public Task<UserModel> DeleteAsync(int id)
+    public async Task<UserModel?> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var userModel = await _context.Users
+            .FirstOrDefaultAsync(x => x.Id == id);
+        if (userModel == null) return null;
+        
+        userModel.IsActive = false;
+        
+        await _context.SaveChangesAsync();
+        
+        return userModel;
     }
 }

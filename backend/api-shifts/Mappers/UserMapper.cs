@@ -23,6 +23,15 @@ public static class UserMapper
             Username = userDto.Username,
             Password = userDto.Password,
             Email = userDto.Email,
+            IsActive = true,
+        };
+    }
+    
+    public static UserModel ToUserFromUpdate(this UpdateUserRequestDto userDto)
+    {
+        return new UserModel
+        {
+            Email = userDto.Email,
         };
     }
 }

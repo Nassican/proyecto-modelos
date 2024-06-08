@@ -42,4 +42,22 @@ public class UserController : ControllerBase
 
         return CreatedAtAction(nameof(GetById), new { id = createdUser.Id }, createdUser.ToUserDto());
     }
+    
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateUserRequestDto userDto)
+    {
+        var user = await _userRepo.UpdateAsync(id, userDto.ToUserFromUpdate());
+        if (user == null) return NotFound("User not found");
+
+        return Ok(user.ToUserDto());
+    }
+    
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        var user = await _userRepo.DeleteAsync(id);
+        if (user == null) return NotFound("User not found");
+
+        return NoContent();
+    }
 }
