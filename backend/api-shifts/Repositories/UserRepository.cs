@@ -18,4 +18,26 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users.ToListAsync();
     }
+
+    public async Task<UserModel?> GetByIdAsync(int id)
+    {
+        return await _context.Users.FindAsync(id);
+    }
+
+    public async Task<UserModel> CreateAsync(UserModel userModel)
+    {
+        await _context.Users.AddAsync(userModel);
+        await _context.SaveChangesAsync();
+        return userModel;
+    }
+
+    public Task<UserModel> UpdateAsync(UserModel user)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<UserModel> DeleteAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
 }

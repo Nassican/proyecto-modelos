@@ -1,3 +1,4 @@
+using api_shifts.Dtos.User;
 using api_shifts.Interfaces;
 using api_shifts.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +20,26 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var users = await _userRepo.GetAllAsync();
-
         var usersDto = users.Select(x => x.ToUserDto());
 
         return Ok(usersDto);
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById([FromRoute] int id)
+    {
+        var user = await _userRepo.GetByIdAsync(id);
+        if (user == null) return NotFound("User not found");
+
+        return Ok(user.ToUserDto());
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] CreateUserRequestDto userDto)
+    {
+        var user = userDto.ToUserFromCreate();
+        var createdUser = await _userRepo.CreateAsync(user);
+
+        return CreatedAtAction(nameof(GetById), new { id = createdUser.Id }, createdUser.ToUserDto());
     }
 }
