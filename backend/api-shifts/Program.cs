@@ -24,6 +24,7 @@ builder.Services.AddDbContext<ShiftsDbContext>(options =>
 builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITypesShiftRepository, TypesShiftRepository>();
 
 var app = builder.Build();
 
