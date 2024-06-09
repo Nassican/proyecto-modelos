@@ -11,7 +11,6 @@ public static class UserMapper
         {
             Id = userModel.Id,
             Username = userModel.Username,
-            Password = userModel.Password,
             Email = userModel.Email,
         };
     }

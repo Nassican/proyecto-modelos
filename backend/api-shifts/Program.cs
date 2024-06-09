@@ -2,6 +2,7 @@ using api_shifts.Data;
 using api_shifts.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using api_shifts.Repositories;
+using api_shifts.Services;
 using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,10 +22,14 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 builder.Services.AddDbContext<ShiftsDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Repositories
 builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITypesShiftRepository, TypesShiftRepository>();
+
+// Services
+builder.Services.AddScoped<IPasswordService, PasswordService>();
 
 var app = builder.Build();
 
