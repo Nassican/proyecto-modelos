@@ -1,32 +1,47 @@
 using api_shifts.Dtos.TypesShift;
+using api_shifts.Interfaces.IRepositories;
 using api_shifts.Interfaces.IServices;
+using api_shifts.Mappers;
 
 namespace api_shifts.Services;
 
 public class TypesShiftService : ITypesShiftService
 {
-    public Task<IEnumerable<TypesShiftDto?>> GetAllAsync()
+    private readonly ITypesShiftRepository _typesShiftRepo;
+
+    public TypesShiftService(ITypesShiftRepository typesShiftRepo)
     {
-        throw new NotImplementedException();
+        _typesShiftRepo = typesShiftRepo;
+    }
+    
+    public async Task<IEnumerable<TypesShiftDto?>> GetAllAsync()
+    {
+        var typesShiftModel = await _typesShiftRepo.GetAllAsync();
+        return typesShiftModel.Select(x => x.ToTypesShiftDto());
     }
 
-    public Task<TypesShiftDto?> GetByIdAsync(int id)
+    public async Task<TypesShiftDto?> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var typesShiftModel = await _typesShiftRepo.GetByIdAsync(id);
+        return typesShiftModel?.ToTypesShiftDto();
     }
 
-    public Task<TypesShiftDto?> CreateAsync(CreateTypesShiftRequestDto typesShiftDto)
+    public async Task<TypesShiftDto?> CreateAsync(CreateTypesShiftRequestDto typesShiftDto)
     {
-        throw new NotImplementedException();
+        var typesShiftModel = typesShiftDto.ToTypesShiftFromCreate();
+        var createShiftModel = await _typesShiftRepo.CreateAsync(typesShiftModel);
+        return createShiftModel.ToTypesShiftDto();        
     }
 
-    public Task<TypesShiftDto?> UpdateAsync(int id, UpdateTypesShiftRequestDto typesShiftDto)
+    public async Task<TypesShiftDto?> UpdateAsync(int id, UpdateTypesShiftRequestDto typesShiftDto)
     {
-        throw new NotImplementedException();
+        var typesShiftModel = await _typesShiftRepo.UpdateAsync(id, typesShiftDto.ToTypesShiftFromUpdate());
+        return typesShiftModel?.ToTypesShiftDto();
     }
 
-    public Task<bool> DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var typesShiftModel = await _typesShiftRepo.DeleteAsync(id);
+        return typesShiftModel != null;
     }
 }

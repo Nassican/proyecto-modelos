@@ -60,8 +60,8 @@ public class UserController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        var success = await _userService.DeleteAsync(id);
-        if (!success) return NotFound("User not found");
+        var deleted = await _userService.DeleteAsync(id);
+        if (!deleted) return NotFound("User not found");
 
         return NoContent();
     }
