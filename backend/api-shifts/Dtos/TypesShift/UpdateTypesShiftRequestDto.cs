@@ -18,6 +18,6 @@ public class UpdateTypesShiftRequestDto
     public string Description { get; set; }
 
     [Required]
-    [Length(1, 2, ErrorMessage = "Code is 1-2 characters long")]
+    [Length(2, 2, ErrorMessage = "Code is 1-2 characters long")]
     public string Code { get; set; }
 }
