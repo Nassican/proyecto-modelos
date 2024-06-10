@@ -30,7 +30,7 @@ public partial class ShiftsDbContext : DbContext
     {
         
     }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ClientModel>(entity =>
@@ -88,7 +88,7 @@ public partial class ShiftsDbContext : DbContext
                 .HasDefaultValue(true)
                 .HasColumnName("is_standby");
             entity.Property(e => e.NumShift)
-                .HasMaxLength(10)
+                .HasMaxLength(16)
                 .HasColumnName("num_shift");
 
             entity.HasOne(d => d.IdClientModelNavigation).WithMany(p => p.Shifts)
@@ -103,7 +103,6 @@ public partial class ShiftsDbContext : DbContext
 
             entity.HasOne(d => d.IdUserModelNavigation).WithMany(p => p.Shifts)
                 .HasForeignKey(d => d.IdUser)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("shifts_id_user_fkey");
         });
 
@@ -113,9 +112,12 @@ public partial class ShiftsDbContext : DbContext
 
             entity.ToTable("types_shifts");
 
+            entity.HasIndex(e => e.Code, "types_shifts_code_key").IsUnique();
+
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Code)
                 .HasMaxLength(2)
+                .IsFixedLength()
                 .HasColumnName("code");
             entity.Property(e => e.Color)
                 .HasMaxLength(6)

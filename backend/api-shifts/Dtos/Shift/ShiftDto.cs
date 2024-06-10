@@ -6,7 +6,7 @@ public class ShiftDto
 {
     public int Id { get; set; }
 
-    public string NumShift { get; set; }
+    public string? NumShift { get; set; }
 
     public DateTime? DateAttended { get; set; }
 
@@ -16,7 +16,7 @@ public class ShiftDto
 
     public int IdClient { get; set; }
 
-    public int IdUser { get; set; }
+    public int? IdUser { get; set; }
 
     public DateTime AtCreated { get; set; }
 }

@@ -7,7 +7,7 @@ public partial class ShiftModel
 {
     public int Id { get; set; }
 
-    public string NumShift { get; set; } = null!;
+    public string? NumShift { get; set; }
 
     public DateTime? DateAttended { get; set; }
 
@@ -19,7 +19,7 @@ public partial class ShiftModel
 
     public int IdClient { get; set; }
 
-    public int IdUser { get; set; }
+    public int? IdUser { get; set; }
 
     public DateTime AtCreated { get; set; }
 
@@ -29,5 +29,5 @@ public partial class ShiftModel
 
     public virtual TypesShiftModel IdTypeShiftModelNavigation { get; set; } = null!;
 
-    public virtual UserModel IdUserModelNavigation { get; set; } = null!;
+    public virtual UserModel? IdUserModelNavigation { get; set; }
 }
