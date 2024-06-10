@@ -14,16 +14,35 @@ public class ShiftRepository : IShiftRepository
         _context = context;
     }
 
-    public async Task<List<ShiftModel>> GetAllAsync()
+    public async Task<IEnumerable<ShiftModel>> GetAllAsync()
     {
-        return await _context.Shifts.ToListAsync();
+        return await _context.Shifts
+            .Where(x => x.IsActive == true)
+            .ToListAsync();
     }
 
     public async Task<ShiftModel?> GetByIdAsync(int id)
     {
         return await _context.Shifts.FindAsync(id);
     }
+    
+    public async Task<IEnumerable<ShiftModel>> GetByIdTypeShiftAsync(int idTypeShift)
+    {
+        return await _context.Shifts
+            .Where(x => x.IdTypeShift == idTypeShift && x.IsActive == true)
+            .ToListAsync();
+    }
 
+    public async Task<ShiftModel?> NextShiftByIdTypeShiftAsync(int idTypeShift)
+    {
+        var shift = await _context.Shifts
+            .Where(x => x.IdTypeShift == idTypeShift && x.IsStandby && x.IsActive)
+            .OrderBy(x => x.NumShift)
+            .FirstOrDefaultAsync();
+
+        return shift;
+    }
+    
     public async Task<ShiftModel> CreateAsync(ShiftModel shiftModel)
     {
         await _context.Shifts.AddAsync(shiftModel);
@@ -31,18 +50,37 @@ public class ShiftRepository : IShiftRepository
         return shiftModel;
     }
 
-    public Task<ShiftModel?> UpdateAsync(int id, ShiftModel shift)
+    public async Task<ShiftModel?> UpdateAsync(int id, ShiftModel shiftModel)
     {
-        throw new NotImplementedException();
+        var exitingShift = await _context.Shifts
+            .FirstOrDefaultAsync(x => x.Id == id);
+        if (exitingShift == null) return null;
+
+        exitingShift.DateAttended = shiftModel.DateAttended;
+        exitingShift.IsAttended = shiftModel.IsAttended;
+        exitingShift.IsStandby = shiftModel.IsStandby;
+        exitingShift.IdUser = shiftModel.IdUser;
+        
+        await _context.SaveChangesAsync();
+        
+        return exitingShift;
     }
 
-    public Task<ShiftModel?> DeleteAsync(int id)
+    public async Task<ShiftModel?> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var shiftModel = await _context.Shifts
+            .FirstOrDefaultAsync(x => x.Id == id);
+        if (shiftModel == null) return null;
+        
+        shiftModel.IsActive = false;
+        
+        await _context.SaveChangesAsync();
+        
+        return shiftModel;
     }
 
-    public Task<bool> ShiftExist(int id)
+    public async Task<bool> ShiftExist(int id)
     {
-        throw new NotImplementedException();
+        return await _context.Shifts.AnyAsync(x => x.Id == id);
     }
 }

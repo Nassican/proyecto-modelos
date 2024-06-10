@@ -32,6 +32,8 @@ builder.Services.AddScoped<ITypesShiftRepository, TypesShiftRepository>();
 // Services
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITypesShiftService, TypesShiftService>();
+builder.Services.AddScoped<IShiftService, ShiftService>();
 
 var app = builder.Build();
 

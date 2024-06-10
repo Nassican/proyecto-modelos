@@ -13,9 +13,11 @@ public static class ShiftMapper
             NumShift = shiftModel.NumShift,
             DateAttended = shiftModel.DateAttended,
             IsAttended = shiftModel.IsAttended,
+            IsStandby = shiftModel.IsStandby,
             IdTypeShift = shiftModel.IdTypeShift,
             IdClient = shiftModel.IdClient,
-            IdUser = shiftModel.IdUser
+            IdUser = shiftModel.IdUser,
+            AtCreated = shiftModel.AtCreated
         };
     }
 
@@ -24,7 +26,10 @@ public static class ShiftMapper
         return new ShiftModel
         {
             IdTypeShift = shiftDto.IdTypeShift,
-            IdClient = shiftDto.IdClient
+            IdClient = shiftDto.IdClient,
+            IsStandby = true,
+            AtCreated = DateTime.Now,
+            IsActive = true
         };
     }
 }

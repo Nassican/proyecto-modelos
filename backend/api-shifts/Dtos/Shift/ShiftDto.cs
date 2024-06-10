@@ -12,6 +12,8 @@ public class ShiftDto
 
     public bool? IsAttended { get; set; }
 
+    public bool IsStandby { get; set; }
+
     public int IdTypeShift { get; set; }
 
     public int IdClient { get; set; }
