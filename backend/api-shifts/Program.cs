@@ -1,5 +1,6 @@
 using api_shifts.Data;
-using api_shifts.Interfaces;
+using api_shifts.Interfaces.IServices;
+using api_shifts.Interfaces.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using api_shifts.Repositories;
 using api_shifts.Services;
@@ -30,6 +31,7 @@ builder.Services.AddScoped<ITypesShiftRepository, TypesShiftRepository>();
 
 // Services
 builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

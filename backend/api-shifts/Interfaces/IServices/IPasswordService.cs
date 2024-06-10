@@ -1,4 +1,4 @@
-namespace api_shifts.Interfaces;
+namespace api_shifts.Interfaces.IServices;
 
 public interface IPasswordService
 {

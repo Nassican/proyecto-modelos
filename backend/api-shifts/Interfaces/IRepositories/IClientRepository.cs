@@ -1,6 +1,6 @@
 using api_shifts.Models;
 
-namespace api_shifts.Interfaces;
+namespace api_shifts.Interfaces.IRepositories;
 
 public interface IClientRepository
 {

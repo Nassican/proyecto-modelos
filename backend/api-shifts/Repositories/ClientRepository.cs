@@ -1,5 +1,5 @@
 using api_shifts.Data;
-using api_shifts.Interfaces;
+using api_shifts.Interfaces.IRepositories;
 using api_shifts.Models;
 using Microsoft.EntityFrameworkCore;
 

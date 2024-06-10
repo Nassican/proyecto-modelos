@@ -1,4 +1,4 @@
-using api_shifts.Interfaces;
+using api_shifts.Interfaces.IServices;
 
 namespace api_shifts.Services;
 

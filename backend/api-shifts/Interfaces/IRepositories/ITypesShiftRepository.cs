@@ -1,6 +1,6 @@
 using api_shifts.Models;
 
-namespace api_shifts.Interfaces;
+namespace api_shifts.Interfaces.IRepositories;
 
 public interface ITypesShiftRepository
 {
@@ -10,5 +10,4 @@ public interface ITypesShiftRepository
     Task<TypesShiftModel?> UpdateAsync(int id, TypesShiftModel typesShift);
     Task<TypesShiftModel?> DeleteAsync(int id);
     Task<bool> TypesShiftExist(int id);
-    
 }

@@ -5,7 +5,7 @@ namespace api_shifts.Mappers;
 
 public static class UserMapper
 {
-    public static UserDto ToUserDto(this UserModel userModel)
+    public static UserDto? ToUserDto(this UserModel userModel)
     {
         return new UserDto
         {
