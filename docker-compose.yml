@@ -14,6 +14,8 @@ services:
       - ./backend/api-shifts:/src/backend/api-shifts
     depends_on:
       - db
+    networks:
+      - app-network
 
 
   frontend:
@@ -29,16 +31,25 @@ services:
       - /app/node_modules
     depends_on:
       - api
+    networks:
+      - app-network
 
   db:
-    container_name: sqlserver
-    build: 
-      context: ./database
-      dockerfile: Dockerfile
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "1433:1433"
+      - "5433:5432"
     volumes:
-      - sqlserverdata:/var/opt/mssql
+      - db_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
 
 volumes:
-  sqlserverdata:
+  db_data:
+
+networks:
+  app-network:
