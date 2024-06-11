@@ -47,6 +47,9 @@ public class ShiftRepository : IShiftRepository
     {
         await _context.Shifts.AddAsync(shiftModel);
         await _context.SaveChangesAsync();
+        
+        await _context.Entry(shiftModel).ReloadAsync();
+        
         return shiftModel;
     }
 
@@ -87,6 +90,6 @@ public class ShiftRepository : IShiftRepository
     public async Task<bool> HasShiftByIdClientOnStandby(int idClient)
     {
         return await _context.Shifts
-            .AnyAsync(x => x.IdClient == idClient && x.IsStandby);
+            .AnyAsync(x => x.IdClient == idClient && x.IsStandby && x.IsActive);
     }
 }

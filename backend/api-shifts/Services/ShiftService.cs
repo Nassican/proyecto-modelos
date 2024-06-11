@@ -55,9 +55,7 @@ public class ShiftService : IShiftService
         var shiftModel = shiftDto.ToShiftFromCreate();
         var createdShiftModel = await _shiftRepo.CreateAsync(shiftModel);
 
-        var searchShiftModel = await _shiftRepo.GetByIdAsync(createdShiftModel.Id);
-        
-        return searchShiftModel?.ToShiftDto();
+        return createdShiftModel?.ToShiftDto();
     }
 
     public async Task<ShiftDto?> TakeShift(TakeShiftRequestDto shiftDto)
