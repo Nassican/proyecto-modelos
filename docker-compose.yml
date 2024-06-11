@@ -25,10 +25,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=development
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - NODE_ENV=production
     depends_on:
       - api
     networks:
