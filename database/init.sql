@@ -1,3 +1,15 @@
+-- Crear la base de datos si no existe
+DO $$
+BEGIN
+   IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'shiftsdb') THEN
+      CREATE DATABASE shiftsdb;
+   END IF;
+END
+$$;
+
+-- Conectar a la base de datos shiftsdb
+\connect shiftsdb;
+
 create table clients (
     id serial primary key,
     name varchar(256) not null,

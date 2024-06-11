@@ -12,24 +12,24 @@
 
 # Estructura del proyecto
 
-<p>
-my-project/ <br>
-├── backend/ <br>
-│   ├── MyBackend/<br>
-│   │   ├── Controllers/<br>
-│   │   ├── Models/<br>
-│   │   ├── Program.cs<br>
-│   │   ├── Startup.cs<br>
-│   │   └── MyBackend.csproj<br>
-│   └── Dockerfile<br>
-├── frontend/<br>
-│   ├── pages/<br>
-│   ├── public/<br>
-│   ├── styles/<br>
-│   ├── next.config.js<br>
-│   └── package.json<br>
-├── database/<br>
-│   ├── init.sql<br>
-├── .env<br>
-└── docker-compose.yml<br>
-</p>
+```
+my-project/ 
+├── backend/ 
+│   ├── MyBackend/
+│   │   ├── Controllers/
+│   │   ├── Models/
+│   │   ├── Program.cs
+│   │   ├── Startup.cs
+│   │   └── MyBackend.csproj
+│   └── Dockerfile
+├── frontend/
+│   ├── pages/
+│   ├── public/
+│   ├── styles/
+│   ├── next.config.js
+│   └── package.json
+├── database/
+│   ├── init.sql
+├── .env
+└── docker-compose.yml
+```
