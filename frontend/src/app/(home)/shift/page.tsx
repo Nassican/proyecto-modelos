@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import axios from "@/lib/axios";
-import { useEffect, useState } from "react";
+import axios from '@/lib/axios';
+import { useEffect, useState } from 'react';
 
 // interface Turno {
 //     "id": 1,
@@ -30,7 +30,7 @@ function TurnosPage() {
   const [turnos, setTurnos] = useState<Shift[]>([]);
 
   const getData = async () => {
-    const res = await axios.get("Shift");
+    const res = await axios.get('Shift');
     setTurnos(res.data);
     console.log(res.data);
   };
