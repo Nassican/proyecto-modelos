@@ -1,5 +1,6 @@
 using api_shifts.Interfaces;
 using api_shifts.Interfaces.IRepositories;
+using api_shifts.Interfaces.IServices;
 using api_shifts.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,20 +10,35 @@ namespace api_shifts.Controllers;
 [Route("api/[controller]")]
 public class ClientController : ControllerBase
 {
-    private readonly IClientRepository _clientRepo;
+    private readonly IClientService _clientService;
     
-    public ClientController(IClientRepository clientRepo)
+    public ClientController(IClientService clientService)
     {
-        _clientRepo = clientRepo;
+        _clientService = clientService;
     }
     
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var clients = await _clientRepo.GetAllAsync();
+        var clients = await _clientService.GetAll();
+        return Ok(clients);
+    }
+    
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById([FromRoute] int id)
+    {
+        var client = await _clientService.GetById(id);
+        if (client == null) return NotFound("Client not found");
 
-        var clientsDto = clients.Select(x => x.ToClientDto());
+        return Ok(client);
+    }
+    
+    [HttpGet("GetByStudentCode/{code}")]
+    public async Task<IActionResult> GetByStudentCode([FromRoute] string code)
+    {
+        var client = await _clientService.GetByStudentCode(code);
+        if (client == null) return NotFound("Client not found");
 
-        return Ok(clientsDto);
+        return Ok(client);
     }
 }

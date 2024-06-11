@@ -16,19 +16,22 @@ public class ClientService : IClientService
         _externalApiService = externalApiService;
     }
 
-    public Task<IEnumerable<ClientDto?>> GetAll()
+    public async Task<IEnumerable<ClientDto?>> GetAll()
     {
-        throw new NotImplementedException();
+        var clients = await _clientsRepo.GetAllAsync();
+        return clients.Select(x => x.ToClientDto());
     }
 
-    public Task<ClientDto?> GetById(int id)
+    public async Task<ClientDto?> GetById(int id)
     {
-        throw new NotImplementedException();
+        var client = await _clientsRepo.GetByIdAsync(id);
+        return client?.ToClientDto();
     }
 
-    public Task<ClientDto?> GetByStudentCode(string studentCode)
+    public async Task<ClientDto?> GetByStudentCode(string studentCode)
     {
-        throw new NotImplementedException();
+        var client = await _clientsRepo.GetByStudentCodeAsync(studentCode);
+        return client?.ToClientDto();
     }
 
     public async Task<ClientDto?> SearchByStudentAndCreate(string studentCode, string email)
