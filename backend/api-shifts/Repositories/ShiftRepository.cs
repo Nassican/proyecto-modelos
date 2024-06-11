@@ -37,7 +37,7 @@ public class ShiftRepository : IShiftRepository
     {
         var shift = await _context.Shifts
             .Where(x => x.IdTypeShift == idTypeShift && x.IsStandby && x.IsActive)
-            .OrderBy(x => x.NumShift)
+            .OrderBy(x => x.AtCreated)
             .FirstOrDefaultAsync();
 
         return shift;
@@ -82,5 +82,11 @@ public class ShiftRepository : IShiftRepository
     public async Task<bool> ShiftExist(int id)
     {
         return await _context.Shifts.AnyAsync(x => x.Id == id);
+    }
+    
+    public async Task<bool> HasShiftByIdClientOnStandby(int idClient)
+    {
+        return await _context.Shifts
+            .AnyAsync(x => x.IdClient == idClient && x.IsStandby);
     }
 }

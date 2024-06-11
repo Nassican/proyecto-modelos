@@ -46,9 +46,18 @@ public class ShiftService : IShiftService
 
     public async Task<ShiftDto?> Create(CreateShiftRequestDto shiftDto)
     {
+        var hasStandbyShift = await _shiftRepo.HasShiftByIdClientOnStandby(shiftDto.IdClient);
+        if (hasStandbyShift)
+        {
+            throw new Exception("The client already has a shift on standby");
+        }
+        
         var shiftModel = shiftDto.ToShiftFromCreate();
         var createdShiftModel = await _shiftRepo.CreateAsync(shiftModel);
-        return createdShiftModel.ToShiftDto();
+
+        var searchShiftModel = await _shiftRepo.GetByIdAsync(createdShiftModel.Id);
+        
+        return searchShiftModel?.ToShiftDto();
     }
 
     public async Task<ShiftDto?> TakeShift(TakeShiftRequestDto shiftDto)

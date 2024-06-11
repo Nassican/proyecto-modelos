@@ -34,10 +34,44 @@ public class ShiftController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateShiftRequestDto shiftDto)
     {
-        var createdShift = await _shiftService.Create(shiftDto);
-        if (createdShift == null) return BadRequest("Shift not created");
-        
-        return CreatedAtAction(nameof(GetById), new { id = createdShift.Id }, createdShift);
+        try
+        {
+            var createdShift = await _shiftService.Create(shiftDto);
+            if (createdShift == null) return BadRequest("Shift not created");
+
+            return CreatedAtAction(nameof(GetById), new { id = createdShift.Id }, createdShift);
+        }
+        catch (Exception ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("NextShift")]
+    public async Task<IActionResult> NextShift([FromBody] NextShiftRequestDto shiftDto)
+    {
+        var nextShift = await _shiftService.NextShiftByIdTypeShift(shiftDto);
+        if (nextShift == null) return NotFound("Shift not found");
+
+        return Ok(nextShift);
+    }
+    
+    [HttpPost("TakeShift")]
+    public async Task<IActionResult> TakeShift([FromBody] TakeShiftRequestDto shiftDto)
+    {
+        var takenShift = await _shiftService.TakeShift(shiftDto);
+        if (takenShift == null) return NotFound("Shift not found");
+
+        return Ok(takenShift);
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Cancel([FromRoute] int id)
+    {
+        var deleted = await _shiftService.CancelShift(id);
+        if (!deleted) return NotFound("Shift not found");
+
+        return NoContent();
     }
 }
 

@@ -12,4 +12,5 @@ public interface IShiftRepository
     Task<ShiftModel?> UpdateAsync(int id, ShiftModel shift);
     Task<ShiftModel?> DeleteAsync(int id);
     Task<bool> ShiftExist(int id);
+    Task<bool> HasShiftByIdClientOnStandby(int idClient);
 }
