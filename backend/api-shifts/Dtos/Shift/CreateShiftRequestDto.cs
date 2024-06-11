@@ -8,5 +8,9 @@ public class CreateShiftRequestDto
     public int IdTypeShift { get; set; }
 
     [Required]
-    public int IdClient { get; set; }
+    public string StudentCode { get; set; }
+    
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
 }

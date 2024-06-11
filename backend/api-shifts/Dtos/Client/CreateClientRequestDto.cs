@@ -9,4 +9,8 @@ public class CreateClientRequestDto
   
     [Required]
     public string StudentCode { get; set; }
+    
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
 }

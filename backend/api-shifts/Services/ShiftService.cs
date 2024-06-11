@@ -7,10 +7,12 @@ namespace api_shifts.Services;
 
 public class ShiftService : IShiftService
 {
+    private readonly IClientService _clientService;
     private readonly IShiftRepository _shiftRepo;
 
-    public ShiftService(IShiftRepository shiftRepo)
+    public ShiftService(IClientService clientService, IShiftRepository shiftRepo)
     {
+        _clientService = clientService;
         _shiftRepo = shiftRepo;
     }
 
@@ -46,13 +48,22 @@ public class ShiftService : IShiftService
 
     public async Task<ShiftDto?> Create(CreateShiftRequestDto shiftDto)
     {
-        var hasStandbyShift = await _shiftRepo.HasShiftByIdClientOnStandby(shiftDto.IdClient);
+        var client = await _clientService.SearchByStudentAndCreate(shiftDto.StudentCode, shiftDto.Email);
+        if (client == null) throw new NullReferenceException("Client not found");
+        
+        var hasStandbyShift = await _shiftRepo.HasShiftByIdClientOnStandby(client.Id);
         if (hasStandbyShift)
         {
             throw new Exception("The client already has a shift on standby");
         }
+
+        var shift = new CreateShiftDto
+        {
+            IdClient = client.Id,
+            IdTypeShift = shiftDto.IdTypeShift
+        };
         
-        var shiftModel = shiftDto.ToShiftFromCreate();
+        var shiftModel = shift.ToShiftFromCreate();
         var createdShiftModel = await _shiftRepo.CreateAsync(shiftModel);
 
         return createdShiftModel?.ToShiftDto();

@@ -11,7 +11,8 @@ public static class ClientMapper
         {
             Id = clientModel.Id,
             Name = clientModel.Name,
-            StudentCode = clientModel.StudentCode
+            StudentCode = clientModel.StudentCode,
+            Email = clientModel.Email
         };
     }
     
@@ -20,7 +21,8 @@ public static class ClientMapper
         return new ClientModel()
         {
             Name = clientDto.Name,
-            StudentCode = clientDto.StudentCode
+            StudentCode = clientDto.StudentCode,
+            Email = clientDto.Email
         };
     }
 }

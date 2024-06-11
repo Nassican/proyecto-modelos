@@ -4,6 +4,7 @@ using api_shifts.Interfaces.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using api_shifts.Repositories;
 using api_shifts.Services;
+using api_shifts.Settings;
 using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<ShiftsDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.Configure<ExternalApiSettings>(builder.Configuration.GetSection("ExternalApi"));
+
 // Repositories
 builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
@@ -46,6 +49,11 @@ builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITypesShiftService, TypesShiftService>();
 builder.Services.AddScoped<IShiftService, ShiftService>();
+builder.Services.AddScoped<IExternalApiService, ExternalApiService>();
+builder.Services.AddScoped<IClientService, ClientService>();
+
+// Register HttpClient
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

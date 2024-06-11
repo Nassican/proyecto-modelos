@@ -21,7 +21,7 @@ public static class ShiftMapper
         };
     }
 
-    public static ShiftModel ToShiftFromCreate(this CreateShiftRequestDto shiftDto)
+    public static ShiftModel ToShiftFromCreate(this CreateShiftDto shiftDto)
     {
         return new ShiftModel
         {
