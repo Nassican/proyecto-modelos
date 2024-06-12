@@ -1,4 +1,4 @@
-import { ITypesShift } from '@/interfaces/shift/types-shift';
+import { ITypesShift } from '@/interfaces/typesShift/types-shift';
 import axios from 'axios';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
