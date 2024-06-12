@@ -100,3 +100,21 @@ appsettings.json de api-shifts/  :
 }
 
 Ten en cuenta que lo que quiero es armar los Dockerfile y docker-compose con volumenes, para ir trabajando en desarrollo
+
+5. Estructura external api:
+
+|--src/
+|  |--config
+|  |--controllers
+|  |--middlewares
+|  |--models
+|  |--schemas
+|  |--utils
+|  |--v1
+|--.env.example
+|--.gitignore
+|--.nvmrc
+|--app.js
+|--Dockerfile
+|--package.json
+|--README.md
