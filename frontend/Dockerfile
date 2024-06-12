@@ -31,7 +31,7 @@ COPY --from=BUILD_IMAGE /app/node_modules ./node_modules
 ENV NODE_ENV=production
 
 # Exponer el puerto 3000
-EXPOSE 3000
+EXPOSE 5000
 
 # Comando para ejecutar la aplicación
 CMD ["npm", "start"]
