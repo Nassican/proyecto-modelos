@@ -7,3 +7,8 @@ export const getTypesShifts = async () => {
   const response = await axios.get<ITypesShift[]>(`${API_BASE_URL}/TypesShift`);
   return response.data;
 };
+
+export const getTypesShiftsById = async (id: number) => {
+  const response = await axios.get<ITypesShift>(`${API_BASE_URL}/TypesShift/${id}`);
+  return response.data;
+};
