@@ -1,120 +1,119 @@
-1. Hola tengo un proyecto con la siguiente estructura de carpetas:
+Hola, tengo la siguiente aplicacion de turnos, estos serian los endpoints de la api que seria el backend:
 
-|--backend/
-|--database/
-|  |--init.sql
-|--frontend/
-|--.env
-|--.env.example
-|--.gitignore
-|--docker-compose.yml
-|--README.md
+Client:
 
-2. Dentro de la carpeta backend/ tengo esta estructura:
-
-|--api-shifts/
-|  |--bin/
-|  |--Controllers/
-|  |--Data/
-|  |--Dtos/
-|  |--Models/
-|  |--obj/
-|  |--Properties/
-|  |--api-shifts.csproj
-|  |--api-shifts.http
-|  |--appsettings.Development.json
-|  |--appsettings.json
-|  |--Dockerfile
-|  |--Program.cs
-|  |--WeatherForecast.cs
-|--api-shifts.sln
-|--.dockerignore
-
-El backend esta hecho con .net core 8
-
-Dockerfile de apishifts:
-
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["api-shifts/api-shifts.csproj", "api-shifts/"]
-RUN dotnet restore "./api-shifts/api-shifts.csproj"
-COPY . .
-WORKDIR "/src/api-shifts"
-RUN dotnet build "./api-shifts.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./api-shifts.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "api-shifts.dll"]
-
-3. Dentro de la carpeta frontend/ tengo esta estructura:
-
-|--frontend/
-|  |--.next/
-|  |--node_modules/
-|  |--public/
-|  |--src/
-|  |--.eslintrc.json
-|  |--.gitignore
-|  |--components.json
-|  |--Dockerfile
-|  |--next-env.d.ts
-|  |--next.config.mjs
-|  |--package-lock.json
-|  |--package.json
-|  |--postcss.config.mjs
-|  |--README.md
-|  |--tailwind.config.ts
-|  |--tsconfig.json
-
-El frontend esta hecho con NextJS usando la libreria de comoponentes shadcn
-
-4. PETICION: Necesito que hagas los Dockerfile correspondiente a cada carpeta, los recursos que voy a necesitar es el backend, el frontend y la base de datos, la base de datos debe ser en sql server y las tablas se deben generar al iniciar el proyecto con docker compose usando el archivo init.sql que esta dentro de la carpeta database
-
-5. VALORES ADICIONALES QUE PUEDEN SERVIR:
-
-appsettings.json de api-shifts/  :
-
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=db;Database=shiftsdb;User=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;"
+- GET /api/client: Response:[
+  {
+    "id": 1,
+    "name": "JESUS DAVID BENAVIDES CHICAIZA",
+    "studentCode": "220034174",
+    "email": "nassicand@udenar.edu.co"
   },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
-    }
-  },
-  "AllowedHosts": "*"
+  {
+    "id": 2,
+    "name": "YORTH HARBIN ORTEGON SANCHEZ",
+    "studentCode": "220034001",
+    "email": "asdsa@gmail.com"
+  }
+]
+- GET /api/client/{id}
+- GET /api/Client/GetByStudentCode/{code}
+
+Shift:
+
+- GET /api/shift: Response [
+  {
+    "id": 1,
+    "numShift": "UR1",
+    "dateAttended": null,
+    "isAttended": null,
+    "isStandby": true,
+    "idTypeShift": 1,
+    "idClient": 1,
+    "idUser": null,
+    "atCreated": "2024-06-13T20:25:56.930556"
+  }
+]
+- POST /api/shift: Response {
+  "idTypeShift": 0,
+  "studentCode": "string",
+  "email": "user@example.com"
+}
+- GET /api/shift/{id}
+- DELETE /api/shift/{id} (Este endpoint cambia de true a false un elemento del shift llamado is_active)
+- POST /api/shift/NextShift: Body:{
+  "idTypeShift": 1,
+  "idUser": 1
+} Response: {
+  "id": 1,
+  "numShift": "UR1",
+  "dateAttended": "2024-06-15T18:48:08.3519247+00:00",
+  "isAttended": null,
+  "isStandby": false,
+  "idTypeShift": 1,
+  "idClient": 1,
+  "idUser": 1,
+  "atCreated": "2024-06-13T20:25:56.930556"
+} (Este endpoint cambia el estado de isStandby a false)
+- POST /api/Shift/TakeShift: Body: {
+  "id": 1,
+  "isAttended": true
+} Response: {
+  "id": 1,
+  "numShift": "UR1",
+  "dateAttended": "2024-06-15T18:48:08.351924",
+  "isAttended": true,
+  "isStandby": false,
+  "idTypeShift": 1,
+  "idClient": 1,
+  "idUser": 1,
+  "atCreated": "2024-06-13T20:25:56.930556"
+} (Este endpoint cambia el isAttended a True y agrega la fecha de cuando fue atendido)
+
+TypesShift:
+
+- GET /api/TypesShift: Response [
+  {
+    "id": 1,
+    "color": "FF0000",
+    "icon": "UrIcon",
+    "name": "Urgency",
+    "description": "I need a urgent medical appintment",
+    "code": "UR"
+  }
+]
+- POST /api/TypesShift: Body: {
+  "color": "string",
+  "icon": "string",
+  "name": "string",
+  "description": "string",
+  "code": "st"
 }
 
-Ten en cuenta que lo que quiero es armar los Dockerfile y docker-compose con volumenes, para ir trabajando en desarrollo
+- GET /api/TypesShift/{id}
+- PUT /api/TypesShift/{id}
+- DELETE /api/TypesShift/{id} (Este endpoint cambia el estado de isactive de true a false)
 
-5. Estructura external api:
+User:
 
-|--src/
-|  |--config
-|  |--controllers
-|  |--middlewares
-|  |--models
-|  |--schemas
-|  |--utils
-|  |--v1
-|--.env.example
-|--.gitignore
-|--.nvmrc
-|--app.js
-|--Dockerfile
-|--package.json
-|--README.md
+- GET /api/User: Response: [
+  {
+    "id": 1,
+    "username": "admin",
+    "email": "user@example.com"
+  }
+]
+
+- POST /api/User: Body: {
+  "username": "string",
+  "password": "string",
+  "email": "user@example.com"
+}
+
+- GET /api/User/{id}
+- PUT /api/User/{id}
+- DELETE /api/User/{id} (Este endpoint cambia el estado de isactive de true a false)
+
+Pregunta: En la parte del frontend estamos usando nextjs con typescript y tenemos primero que todo el home, el cual nos da 2 opciones, login para el user y la opcion de hacer un shift, la opcion de hacer un shift nos lleva a la ruta /shift, en esta ruta /shift se van a ver todos los tipos de turnos que existen y el cliente puede hacer un turno al darle click al tipo de turno que desea, se va a abrir un dialog y agregando su codigo y un correo electronico puede reservar un turno, despues de haber reservado se va a ir a la ruta /shift/{id_shift_creado} y podra ver su shift, eso es lo que hay por ahora, ayudame a hacer el login usando nextjs para que los usuarios puedan hacer el manejo de turnos de los cliente y que el sistema este completo usando los endpoints que te he proporcionado, no hagas una pagina de shift por que la seccion de hacer turno ya esta hecha, la seccion de mostrar el ticket ya esta hecha, y del home ya estan hechas, no hagas un login, implementa la funcionalidad para que los turnos tengan un flujo normal.
+
+POR FAVOR ANALIZO TODO ESTE TEXTO PORQUE AQUI ESTAN TODOS LOS ENPOINTS NECESARIOS, USA ESTOS ENDPOINTS
