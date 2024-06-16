@@ -1,0 +1,18 @@
+/* components/ShapeSeparator.module.css */
+.shapeSeparator {
+  position: relative;
+  top: 30px;
+  /* Fondo degradado del contenedor */
+}
+
+.shapeSeparator svg {
+  display: block; /* Ajusta el SVG al ancho completo del contenedor */
+  height: 100%; /* Ajusta el SVG al alto completo del contenedor */
+  width: 100%; /* Ajusta el SVG al ancho completo del contenedor */
+  filter: drop-shadow(0 8px 4px rgba(0, 0, 0, 0.2)); /* Sombra */
+  
+}
+
+.shapeSeparator path {
+  fill: url(#gradient); /* Usa el gradiente para el color de relleno */
+}

@@ -15,3 +15,13 @@ export interface ICreateShift {
   studentCode: string;
   email: string;
 }
+
+export interface INextShift {
+  idTypeShift: number;
+  idUser: number;
+}
+
+export interface ITakeShift {
+  id: number;
+  isAttended: boolean | null;
+}

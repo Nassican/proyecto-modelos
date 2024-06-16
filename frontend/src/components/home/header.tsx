@@ -11,7 +11,7 @@ export function Header() {
           <FaCode className="h-6 w-6 text-gray-900 dark:text-gray-50" />
           <span className="font-semibold">Shifts Udenar</span>
         </Link>
-        <Button size="sm" className="hidden sm:inline-flex">
+        <Button size="sm">
           Login
         </Button>
       </header>
