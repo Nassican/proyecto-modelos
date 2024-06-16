@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ITypesShift } from '@/interfaces/typesShift/types-shift';
+import { Label } from '@radix-ui/react-label';
 
 interface CreateEditSheetProps {
   isOpen: boolean;
@@ -25,9 +26,10 @@ const CreateEditSheet: FC<CreateEditSheetProps> = ({ isOpen, onClose, typeShift,
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    const newValue = name === 'color' ? value.replace('#', '') : value;
     setFormValues((prevValues) => ({
       ...prevValues,
-      [name]: value,
+      [name]: newValue,
     }));
   };
 
@@ -42,17 +44,39 @@ const CreateEditSheet: FC<CreateEditSheetProps> = ({ isOpen, onClose, typeShift,
           <SheetTitle>{typeShift ? 'Edit Type Shift' : 'Create New Type Shift'}</SheetTitle>
         </SheetHeader>
         <div className="grid gap-4 py-4">
-          <Input id="name" name="name" placeholder="Name" value={formValues.name ?? ''} onChange={handleChange} />
-          <Input
-            id="description"
-            name="description"
-            placeholder="Description"
-            value={formValues.description ?? ''}
-            onChange={handleChange}
-          />
-          <Input id="code" name="code" placeholder="Code" value={formValues.code ?? ''} onChange={handleChange} />
-          <Input id="color" name="color" placeholder="Color" value={formValues.color ?? ''} onChange={handleChange} />
-          <Input id="icon" name="icon" placeholder="Icon" value={formValues.icon ?? ''} onChange={handleChange} />
+          <div>
+            <Label className="font-semibold text-sm">Name</Label>
+            <Input id="name" name="name" placeholder="Name" value={formValues.name ?? ''} onChange={handleChange} />
+          </div>
+          <div>
+            <Label className="font-semibold text-sm">Description</Label>
+            <Input
+              id="description"
+              name="description"
+              placeholder="Description"
+              value={formValues.description ?? ''}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <Label className="font-semibold text-sm">Code</Label>
+            <Input id="code" name="code" placeholder="Code" value={formValues.code ?? ''} onChange={handleChange} />
+          </div>
+          <div>
+            <Label className="font-semibold text-sm">Color</Label>
+            <Input
+              type="color"
+              id="color"
+              name="color"
+              placeholder="Color"
+              value={`#${formValues.color ?? '000000'}`} // default to black if not set
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <Label className="font-semibold text-sm">Icon</Label>
+            <Input id="icon" name="icon" placeholder="Icon" value={formValues.icon ?? ''} onChange={handleChange} />
+          </div>
           <Button onClick={handleSubmit}>{typeShift ? 'Update' : 'Create'}</Button>
           <Button onClick={onClose}>Cancel</Button>
         </div>

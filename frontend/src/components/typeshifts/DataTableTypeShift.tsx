@@ -22,6 +22,7 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ITypesShift } from '@/interfaces/typesShift/types-shift';
 import { ChevronDown, MoreHorizontal } from 'lucide-react';
+import { Badge } from '../ui/badge';
 
 interface Props {
   data: ITypesShift[];
@@ -52,6 +53,9 @@ const DataTable: React.FC<Props> = ({ data, handleEdit, handleDelete, handleProp
     {
       accessorKey: 'color',
       header: 'Color',
+      cell: ({ row }) => (
+        <Badge style={{ backgroundColor: `#${row.original.color}`, color: 'white' }}>#{row.original.color}</Badge>
+      ),
     },
     {
       accessorKey: 'icon',
