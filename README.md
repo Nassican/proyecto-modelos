@@ -6,8 +6,8 @@
 
 | Elemento | Tecnologia | Comentario |
 | ---         |     ---      |          --- |
-| Frontend   | NextJS     | Puerto 3000    |
-| Backend     | .NET       | Puerto 5000      |
+| Frontend   | NextJS     | Puerto 5000    |
+| Backend     | .NET       | Puerto 8080      |
 | Base de datos     | PostgreSQL       | Script init.sql      |
 
 # Estructura del proyecto
