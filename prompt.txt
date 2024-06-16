@@ -114,6 +114,129 @@ User:
 - PUT /api/User/{id}
 - DELETE /api/User/{id} (Este endpoint cambia el estado de isactive de true a false)
 
-Pregunta: En la parte del frontend estamos usando nextjs con typescript y tenemos primero que todo el home, el cual nos da 2 opciones, login para el user y la opcion de hacer un shift, la opcion de hacer un shift nos lleva a la ruta /shift, en esta ruta /shift se van a ver todos los tipos de turnos que existen y el cliente puede hacer un turno al darle click al tipo de turno que desea, se va a abrir un dialog y agregando su codigo y un correo electronico puede reservar un turno, despues de haber reservado se va a ir a la ruta /shift/{id_shift_creado} y podra ver su shift, eso es lo que hay por ahora, ayudame a hacer el login usando nextjs para que los usuarios puedan hacer el manejo de turnos de los cliente y que el sistema este completo usando los endpoints que te he proporcionado, no hagas una pagina de shift por que la seccion de hacer turno ya esta hecha, la seccion de mostrar el ticket ya esta hecha, y del home ya estan hechas, no hagas un login, implementa la funcionalidad para que los turnos tengan un flujo normal.
 
 POR FAVOR ANALIZO TODO ESTE TEXTO PORQUE AQUI ESTAN TODOS LOS ENPOINTS NECESARIOS, USA ESTOS ENDPOINTS
+
+Por ahora tengo los siguientes elementos del frontend realizado en NextJS usando shadcn: CRUD de shifts de clientes, CRUD de los typeshift y CRUD de user, y ahora estoy haciendo la parte de manejo de los shift para que los USER seleccionen los tipos de shift que deben manejar para atender los SHIFTS de los CLIENTES, me falta que el User pueda darle a NextShift ya l darle NextShift una verificacion de si el usuario fue atendido o no (TakeShift), para que asi pase al otro turno segun el typeshift que esta atendiendo, y por ultimo me falta la interfaz TV para que los clientes vean los turnos en vivo.
+
+Estructura de mi frontend:
+
+
+�   .dockerignore
+�   .env.local
+�   .env.local.example
+�   .eslintrc.json
+�   .gitignore
+�   .prettierignore
+�   .prettierrc.json
+�   arbol.txt
+�   arbol2.txt
+�   components.json
+�   Dockerfile
+�   next-env.d.ts
+�   next.config.mjs
+�   package-lock.json
+�   package.json
+�   postcss.config.mjs
+�   README.md
+�   tailwind.config.ts
+�   tsconfig.json
+�   
++---public
+�       next.svg
+�       vercel.svg
+�       
++---src
+    +---app
+    �   �   favicon.ico
+    �   �   globals.css
+    �   �   layout.tsx
+    �   �   
+    �   +---(home)
+    �       �   layout.tsx
+    �       �   page.tsx
+    �       �   
+    �       +---admin
+    �       �   �   page.tsx
+    �       �   �   
+    �       �   +---typeshift
+    �       �   �       page.tsx
+    �       �   �       
+    �       �   +---user
+    �       �   �       page.tsx
+    �       �   �       
+    �       �   +---[id]
+    �       �           page.tsx
+    �       �           
+    �       +---client
+    �       �       page.tsx
+    �       �       
+    �       +---login
+    �       �       page.tsx
+    �       �       
+    �       +---shift
+    �           �   page.tsx
+    �           �   
+    �           +---[id]
+    �                   not-found.tsx
+    �                   page.tsx
+    �                   
+    +---components
+    �   +---home
+    �   �       header.tsx
+    �   �       
+    �   +---login
+    �   �       LoginForm.tsx
+    �   �       
+    �   +---shifts
+    �   �       buttons-grid.tsx
+    �   �       create-form.tsx
+    �   �       form-dialog.tsx
+    �   �       
+    �   +---ticket
+    �   �       card-extensed.tsx
+    �   �       ShapeSeparator.module.css
+    �   �       
+    �   +---typeshifts
+    �   �       create-edit-typeshift.tsx
+    �   �       DataTableTypeShift.tsx
+    �   �       
+    �   +---ui
+    �   �       badge.tsx
+    �   �       button.tsx
+    �   �       card.tsx
+    �   �       dialog.tsx
+    �   �       dropdown-menu.tsx
+    �   �       input.tsx
+    �   �       label.tsx
+    �   �       scroll-area.tsx
+    �   �       sheet.tsx
+    �   �       table.tsx
+    �   �       
+    �   +---user
+    �           create-edit-user.tsx
+    �           DataTableUser.tsx
+    �           
+    +---interfaces
+    �   +---client
+    �   �       client.tsx
+    �   �       
+    �   +---shift
+    �   �       shift.tsx
+    �   �       
+    �   +---typesShift
+    �   �       types-shift.tsx
+    �   �       
+    �   +---user
+    �           user.tsx
+    �           
+    +---lib
+    �       axios.ts
+    �       utils.ts
+    �       
+    +---services
+            clientService.ts
+            shiftService.ts
+            typesShiftService.ts
+            userService.ts
+            
