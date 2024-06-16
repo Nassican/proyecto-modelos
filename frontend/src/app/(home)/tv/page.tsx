@@ -1,38 +1,48 @@
-// src/app/tv/page.tsx
-import React, { useEffect, useState } from 'react';
-import axios from '@/lib/axios';
+'use client';
+
 import { IShift } from '@/interfaces/shift/shift';
-import { getAllShifts } from '@/services/shiftService';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { useEffect, useState } from 'react';
 
 const TVPage = () => {
-  const [shifts, setShifts] = useState<IShift[]>([]);
+  const [connection, setConnection] = useState();
+  const [message, setMessage] = useState<IShift>();
+
+  const joinGroup = async (username: string, group: string) => {
+    try {
+      // initiate a connection ReceiveMessage JoinGroup
+      const conn = new HubConnectionBuilder()
+        .withUrl('http://localhost:5246/notification')
+        .configureLogging(LogLevel.Information)
+        .build();
+
+      // set up handler
+      conn.on('JoinGroup', (username, msg) => {
+        console.log(`msg: ${msg}`);
+      });
+
+      conn.on('ReceiveNextShift', (msg) => {
+        console.log(msg);
+        setMessage(msg);
+      });
+
+      await conn.start();
+      await conn.invoke('JoinGroup', { username, group });
+
+      setConnection(connection);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    const fetchShifts = async () => {
-      try {
-        const response = await getAllShifts();
-        setShifts(response);
-      } catch (error) {
-        console.error('Error al obtener los turnos:', error);
-      }
-    };
-
-    fetchShifts();
-
-    const interval = setInterval(fetchShifts, 5000); // Actualizar cada 5 segundos
-    return () => clearInterval(interval);
+    joinGroup('televisor', 'teves');
   }, []);
 
   return (
     <div>
-      <h1>Turnos en Vivo</h1>
-      <ul>
-        {shifts.map(shift => (
-          <li key={shift.id}>
-            {shift.numShift} - {shift.isStandby ? 'En espera' : 'Atendido'}
-          </li>
-        ))}
-      </ul>
+      <h1>TV</h1>
+      <p>{message?.numShift ?? 'not found'}</p>
     </div>
   );
 };

@@ -29,9 +29,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAllOrigins",
         policy =>
         {
-            policy.AllowAnyOrigin()
+            policy.WithOrigins("http://localhost:5000")
                 .AllowAnyMethod()
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .AllowCredentials();
         });
 });
 
@@ -48,6 +49,7 @@ builder.Services.AddScoped<ITypesShiftRepository, TypesShiftRepository>();
 
 // IServices
 builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITypesShiftService, TypesShiftService>();
 builder.Services.AddScoped<IShiftService, ShiftService>();

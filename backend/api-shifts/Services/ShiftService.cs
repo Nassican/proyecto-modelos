@@ -9,11 +9,13 @@ public class ShiftService : IShiftService
 {
     private readonly IClientService _clientService;
     private readonly IShiftRepository _shiftRepo;
+    private readonly INotificationService _notificationService;
 
-    public ShiftService(IClientService clientService, IShiftRepository shiftRepo)
+    public ShiftService(IClientService clientService, IShiftRepository shiftRepo, INotificationService notificationService)
     {
         _clientService = clientService;
         _shiftRepo = shiftRepo;
+        _notificationService = notificationService;
     }
 
     public async Task<IEnumerable<ShiftDto?>> GetAll()
@@ -43,7 +45,16 @@ public class ShiftService : IShiftService
         shiftModel.IsStandby = false;
         shiftModel.DateAttended = DateTime.Now;
         var updateShiftModel = await _shiftRepo.UpdateAsync(shiftModel.Id, shiftModel);
-        return updateShiftModel?.ToShiftDto();
+        
+        var shiftDtoResult = updateShiftModel?.ToShiftDto();
+        
+        // Notify all clients about the next shift
+        if (shiftDtoResult != null)
+        {
+            await _notificationService.NotifyNextShiftAsync(shiftDtoResult);
+        }
+        
+        return shiftDtoResult;
     }
 
     public async Task<ShiftDto?> Create(CreateShiftRequestDto shiftDto)
