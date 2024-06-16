@@ -1,4 +1,5 @@
 using api_shifts.Data;
+using api_shifts.Hubs;
 using api_shifts.Interfaces.IServices;
 using api_shifts.Interfaces.IRepositories;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Newtonsoft.Json;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSignalR();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -38,13 +40,13 @@ builder.Services.AddDbContext<ShiftsDbContext>(options =>
 
 builder.Services.Configure<ExternalApiSettings>(builder.Configuration.GetSection("ExternalApi"));
 
-// Repositories
+// IRepositories
 builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITypesShiftRepository, TypesShiftRepository>();
 
-// Services
+// IServices
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITypesShiftService, TypesShiftService>();
@@ -72,5 +74,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<NotificationHub>("/notification");
 
 app.Run();
