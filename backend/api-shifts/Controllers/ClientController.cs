@@ -1,7 +1,5 @@
-using api_shifts.Interfaces;
-using api_shifts.Interfaces.IRepositories;
 using api_shifts.Interfaces.IServices;
-using api_shifts.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api_shifts.Controllers;
@@ -18,6 +16,7 @@ public class ClientController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAll()
     {
         var clients = await _clientService.GetAll();

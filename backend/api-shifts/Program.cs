@@ -1,3 +1,4 @@
+using System.Text;
 using api_shifts.Data;
 using api_shifts.Hubs;
 using api_shifts.Interfaces.IServices;
@@ -6,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using api_shifts.Repositories;
 using api_shifts.Services;
 using api_shifts.Settings;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +19,34 @@ builder.Services.AddSignalR();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(option =>
+{
+    option.SwaggerDoc("v1", new OpenApiInfo() { Title = "Demo API", Version = "v1" });
+    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+});
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
@@ -29,7 +59,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAllOrigins",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5000")
+            policy.WithOrigins(builder.Configuration["CORS:AllowedOrigins"])
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials();
@@ -38,6 +68,19 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDbContext<ShiftsDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddAuthentication()
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"]))
+        };
+    });
 
 builder.Services.Configure<ExternalApiSettings>(builder.Configuration.GetSection("ExternalApi"));
 
@@ -48,13 +91,14 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITypesShiftRepository, TypesShiftRepository>();
 
 // IServices
-builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITypesShiftService, TypesShiftService>();
 builder.Services.AddScoped<IShiftService, ShiftService>();
 builder.Services.AddScoped<IExternalApiService, ExternalApiService>();
 builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 // Register HttpClient
 builder.Services.AddHttpClient();
@@ -72,6 +116,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseAuthorization();
 

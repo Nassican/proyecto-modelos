@@ -41,8 +41,6 @@ public class UserRepository : IUserRepository
 
     public async Task<UserModel> CreateAsync(UserModel userModel)
     {
-        userModel.Password = _passwordService.HashPassword(userModel.Password);
-        
         await _context.Users.AddAsync(userModel);
         await _context.SaveChangesAsync();
         return userModel;
