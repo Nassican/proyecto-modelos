@@ -58,14 +58,24 @@ export function ButtonsGrid() {
                 className={cn('rounded-lg p-4 text-lg hover:bg-opacity-90')}
                 style={{ backgroundColor: `#${shift.color}`, color: getContrastColor(`#${shift.color}`) }}
               >
-                <CardHeader>
-                  <CardTitle style={{ color: getContrastColor(`#${shift.color}`) }}>{shift.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription style={{ color: getContrastColor(`#${shift.color}`) }}>
-                    {shift.description}
-                  </CardDescription>
-                </CardContent>
+                <div className='flex items-center justify-between'>
+                  <div>
+                    <CardHeader>
+                      <CardTitle style={{ color: getContrastColor(`#${shift.color}`) }}>{shift.name}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription style={{ color: getContrastColor(`#${shift.color}`) }}>
+                        {shift.description}
+                      </CardDescription>
+                    </CardContent>
+                  </div>
+                  <img
+                    src={shift.icon}
+                    alt={shift.name}
+                    className="h-16 w-16 m-4"
+                    style={{ filter: `invert(${getContrastColor(`#${shift.color}`) === 'white' ? 1 : 0})` }}
+                  />
+                </div>
               </Card>
             </button>
           </DialogTrigger>

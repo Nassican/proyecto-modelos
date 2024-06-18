@@ -44,7 +44,7 @@ const DataTable: React.FC<Props> = ({ data, handleEdit, handleDelete, handleProp
     },
     {
       accessorKey: 'description',
-      header: 'Description2',
+      header: 'Description',
     },
     {
       accessorKey: 'code',
@@ -60,9 +60,15 @@ const DataTable: React.FC<Props> = ({ data, handleEdit, handleDelete, handleProp
     {
       accessorKey: 'icon',
       header: 'Icon',
+      cell: ({ row }) => (
+        <div className="flex items-center">
+          <img src={row.original.icon} alt={row.original.name} className="h-6 w-6" />
+        </div>
+      ),
     },
     {
       id: 'actions',
+      header: 'Actions',
       enableHiding: false,
       cell: ({ row }) => {
         const typeShift = row.original;

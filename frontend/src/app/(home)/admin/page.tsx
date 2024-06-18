@@ -78,17 +78,12 @@ function UserPage() {
 
   if (loading) return <div>Loading...</div>;
 
-  // Conseguir elemento cardHeader
-  const cardHeader = document.getElementById('cardHeader')?.offsetHeight || 0;
-
-  console.log('cardHeader', cardHeader);
-
   return (
     <div className="container mx-auto p-4">
       <Card>
-        <CardHeader id="cardHeader">
+        <CardHeader>
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold">Admin Page</h1>
+            <h1 className="text-2xl font-bold">Admin Shift Page</h1>
             <Button onClick={() => router.push('/')}>Go back to home</Button>
           </div>
           <div className="flex items-center justify-between">
@@ -105,14 +100,17 @@ function UserPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-full overflow-x-auto" style={{ height: `calc(100vh - ${cardHeader + 16 + 66}px)` }}>
+          <ScrollArea className="h-auto overflow-x-auto">
             <ul className="grid grid-cols-2 gap-4">
               {filteredTypeShifts.map((typeShift) => (
                 <li key={typeShift.id}>
                   <Link href={`/admin/${typeShift.id}`} className="cursor-pointer text-lg">
-                    <div className="grid rounded-lg border p-4 hover:bg-slate-200 hover:shadow-md">
-                      <Label className="cursor-pointer text-lg">{typeShift.name}</Label>
-                      <Label className="cursor-pointer text-sm">{getShiftCount(typeShift.id)} shifts</Label>
+                    <div className="flex items-center justify-between rounded-lg border p-4 hover:bg-slate-200 hover:shadow-md">
+                      <div className='grid'>
+                        <Label className="cursor-pointer text-lg">{typeShift.name}</Label>
+                        <Label className="cursor-pointer text-sm">{getShiftCount(typeShift.id)} shifts</Label>
+                      </div>
+                      <img src={typeShift.icon} alt={typeShift.name} />
                     </div>
                   </Link>
                 </li>

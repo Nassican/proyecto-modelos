@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { getTypesShifts, putTypesShifts, postTypesShifts, deleteTypesShifts } from '@/services/typesShiftService';
 import { ITypesShift } from '@/interfaces/typesShift/types-shift';
-import { Button } from '@/components/ui/button';
 import DataTable from '@/components/typeshifts/DataTableTypeShift';
-import { useRouter } from 'next/navigation';
 import CreateEditSheet from '@/components/typeshifts/create-edit-typeshift';
+import axios from 'axios';
+
 
 const TypeShiftPage: React.FC = () => {
   const [typeShifts, setTypeShifts] = useState<ITypesShift[]>([]);
@@ -14,11 +14,22 @@ const TypeShiftPage: React.FC = () => {
   const [editingTypeShift, setEditingTypeShift] = useState<ITypesShift | null>(null);
   const [newTypeShift, setNewTypeShift] = useState<Partial<ITypesShift>>({});
   const [isOpen, setIsOpen] = useState(false); // Estado para controlar si la hoja está abierta
-  const router = useRouter();
+  const [iconList, setIconList] = useState<{ name: string; url: string }[]>([]);
 
   useEffect(() => {
+    fetchIconList();
     fetchTypeShifts();
   }, []);
+
+  const fetchIconList = async () => {
+    try {
+      const res = await axios.get('/api/icons');
+      console.log(res.data);
+      setIconList(res.data);
+    } catch (error) {
+      console.error('Error fetching icon list:', error);
+    }
+  };
 
   const fetchTypeShifts = async () => {
     try {
@@ -72,6 +83,8 @@ const TypeShiftPage: React.FC = () => {
   };
 
   const handleClose = () => {
+    // Limpiar el estado de edición y cierre de la hoja
+    setEditingTypeShift(null);
     setIsOpen(false); // Manejar el cierre de la hoja
   };
 
@@ -92,6 +105,7 @@ const TypeShiftPage: React.FC = () => {
         onClose={handleClose}
         onSave={editingTypeShift ? handleUpdate : handleCreate}
         typeShift={editingTypeShift}
+        iconList={iconList}
       />
     </div>
   );
