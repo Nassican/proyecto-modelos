@@ -1,5 +1,5 @@
 // src/app/tv/page.tsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from '@/lib/axios';
 import { IShift } from '@/interfaces/shift/shift';
 import { getAllShifts } from '@/services/shiftService';
