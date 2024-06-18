@@ -1,7 +1,8 @@
 'use client';
 
+import NextShiftButton from '@/components/shifts/next-take-shift-button';
 import { IClient } from '@/interfaces/client/client';
-import { IShift } from '@/interfaces/shift/shift';
+import { INextShift, IShift, ITakeShift } from '@/interfaces/shift/shift';
 import { getAllShifts, postNextShift } from '@/services/shiftService';
 import { useEffect, useState } from 'react';
 
@@ -33,13 +34,23 @@ function page({ params }: { params: { id: string } }) {
     }
   };
 
+  const interfaceNextShift: INextShift = {
+    idTypeShift: Number(idType),
+    idUser: idUser,
+  };
+
+  const interfaceTakeShift: ITakeShift = {
+    id: currentShift ? currentShift.id : 0,
+    isAttended: false, // Esto se actualizará según la respuesta del usuario
+  };
+
   const handleNextShift = async () => {
     if (!currentShift) return;
 
     const idTypeShift = Number(idType);
 
     try {
-      const nextShift = await postNextShift({ idTypeShift , idUser });
+      const nextShift = await postNextShift({ idTypeShift, idUser });
       setCurrentShift(nextShift);
     } catch (error) {
       console.error(error);
@@ -55,10 +66,10 @@ function page({ params }: { params: { id: string } }) {
         <div>
           <h2>Current Shift</h2>
           <p>Shift Number: {currentShift.numShift}</p>
-          <p>Is Attended: {currentShift.isAttended ? "Yes" : "No"}</p>
-          <p>Is Standby: {currentShift.isStandby ? "Yes" : "No"}</p>
+          <p>Is Attended: {currentShift.isAttended ? 'Yes' : 'No'}</p>
+          <p>Is Standby: {currentShift.isStandby ? 'Yes' : 'No'}</p>
           <p>Date Attended: {currentShift.dateAttended}</p>
-          <button onClick={handleNextShift}>Next Shift</button>
+          <NextShiftButton nextShift={interfaceNextShift} currentShift={interfaceTakeShift} />
         </div>
       ) : (
         <p>No current shift available</p>
@@ -68,8 +79,8 @@ function page({ params }: { params: { id: string } }) {
         {shifts.map((shift) => (
           <li key={shift.id}>
             <p>Shift Number: {shift.numShift}</p>
-            <p>Is Attended: {shift.isAttended ? "Yes" : "No"}</p>
-            <p>Is Standby: {shift.isStandby ? "Yes" : "No"}</p>
+            <p>Is Attended: {shift.isAttended ? 'Yes' : 'No'}</p>
+            <p>Is Standby: {shift.isStandby ? 'Yes' : 'No'}</p>
             <p>Date Attended: {shift.dateAttended}</p>
           </li>
         ))}

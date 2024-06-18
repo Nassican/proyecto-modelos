@@ -23,5 +23,5 @@ export interface INextShift {
 
 export interface ITakeShift {
   id: number;
-  isAttended: boolean | null;
+  isAttended?: boolean | null;
 }

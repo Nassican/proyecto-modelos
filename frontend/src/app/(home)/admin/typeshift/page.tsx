@@ -7,7 +7,6 @@ import DataTable from '@/components/typeshifts/DataTableTypeShift';
 import CreateEditSheet from '@/components/typeshifts/create-edit-typeshift';
 import axios from 'axios';
 
-
 const TypeShiftPage: React.FC = () => {
   const [typeShifts, setTypeShifts] = useState<ITypesShift[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +23,6 @@ const TypeShiftPage: React.FC = () => {
   const fetchIconList = async () => {
     try {
       const res = await axios.get('/api/icons');
-      console.log(res.data);
       setIconList(res.data);
     } catch (error) {
       console.error('Error fetching icon list:', error);
