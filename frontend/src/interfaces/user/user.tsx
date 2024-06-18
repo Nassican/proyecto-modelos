@@ -1,3 +1,5 @@
+import { IShift } from "@/interfaces/shift/shift";
+
 export interface IUser {
   id: number;
   username: string;
@@ -12,4 +14,11 @@ export interface ICreateUser {
 
 export interface IUpdateUser {
   email: string;
+}
+
+export interface IUserAttending {
+  userActive: number;
+  typeShift: number;
+  place: string;
+  currentShift: IShift | null;
 }

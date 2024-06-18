@@ -34,7 +34,7 @@ const CreateEditSheet: FC<CreateEditSheetProps> = ({ isOpen, onClose, typeShift,
     try {
       const res = await fetch('/api/icons');
       const data = await res.json();
-      console.log(data);
+      //console.log(data);
       setIconList(data);
     } catch (error) {
       console.error('Error fetching icon list:', error);

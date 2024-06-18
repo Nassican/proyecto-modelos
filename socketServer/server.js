@@ -1,4 +1,4 @@
-const { Server } = require('socket.io');
+import { Server } from 'socket.io';
 const io = new Server(3002, {
   cors: {
     origin: '*',
@@ -9,7 +9,7 @@ io.on('connection', (socket) => {
   console.log('New client connected');
 
   socket.on('attend_shift', (data) => {
-    console.log(`User ${data.userActive} is attending shifts of type ${data.typeShift} at box ${data.caja}`);
+    console.log(`User ${data.userActive} is attending shifts of type ${data.typeShift} at box ${data.place}`);
     io.emit('attend_shift', data);
   });
 

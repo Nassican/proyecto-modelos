@@ -15,9 +15,10 @@ import {
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
 import { usePathname } from 'next/navigation';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import useConfirmation from '@/hooks/useConfirmation';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -30,6 +31,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const [confirmOnUnload, setConfirmOnUnload] = useState(true);
+
+  // Habilitar/deshabilitar la confirmación según el estado
+  useConfirmation(confirmOnUnload, '¿Estás seguro de abandonar la página? Se perderá el valor de la caja.');
+
 
   const generateBreadcrumbs = () => {
     const segments = pathname.split('/').filter(Boolean);

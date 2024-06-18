@@ -3,14 +3,36 @@ import { Button } from '@/components/ui/button';
 import { INextShift, IShift, ITakeShift } from '@/interfaces/shift/shift';
 import { postNextShift, postTakeShift } from '@/services/shiftService';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import INextShiftButtonProps from '@/interfaces/websocket/websocket';
+
 
 interface NextShiftButtonProps {
   nextShift: INextShift;
   currentShift: ITakeShift;
-  onShiftCompleted: () => void; // Callback to reload shifts
+  onShiftCompleted: () => void;
+  sendSignalToTV: (props: INextShiftButtonProps) => void;
+  isPlaceSelected: boolean;
+  place: string | null;
+  setIsPlaceSelected: (value: boolean) => void;
+  setIsOnShift: (value: boolean) => void;
+  idUser: number;
+  idType: string;
+  currentShiftToSocket: IShift | null;
 }
 
-const NextShiftButton = ({ nextShift, currentShift, onShiftCompleted }: NextShiftButtonProps) => {
+const NextShiftButton = ({
+  nextShift,
+  currentShift,
+  onShiftCompleted,
+  sendSignalToTV,
+  isPlaceSelected,
+  place,
+  setIsPlaceSelected,
+  setIsOnShift,
+  idUser,
+  idType,
+  currentShiftToSocket,
+}: NextShiftButtonProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleNextShift = () => {
@@ -26,17 +48,34 @@ const NextShiftButton = ({ nextShift, currentShift, onShiftCompleted }: NextShif
     };
 
     try {
+
+      const data: INextShiftButtonProps = {
+        place,
+        setIsPlaceSelected,
+        setIsOnShift,
+        idUser,
+        idType,
+        currentShift: currentShiftToSocket,
+      };
+
       await postTakeShift(takeShift);
       await postNextShift(nextShift);
-      onShiftCompleted(); // Reload shifts
+      await onShiftCompleted(); // Reload shifts
+      await sendSignalToTV(data);
     } catch (error) {
       console.error('Error handling shift:', error);
     }
+
+
+
+    
   };
 
   return (
     <>
-      <Button onClick={handleNextShift}>Next Shift</Button>
+      <Button onClick={handleNextShift} disabled={isPlaceSelected}>
+        Next Shift
+      </Button>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent>
           <DialogHeader>
@@ -44,7 +83,9 @@ const NextShiftButton = ({ nextShift, currentShift, onShiftCompleted }: NextShif
           </DialogHeader>
           <DialogFooter>
             <Button onClick={() => handleUserResponse(true)}>Sí</Button>
-            <Button variant="secondary" onClick={() => handleUserResponse(false)}>No</Button>
+            <Button variant="secondary" onClick={() => handleUserResponse(false)}>
+              No
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
