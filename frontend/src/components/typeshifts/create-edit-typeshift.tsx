@@ -127,10 +127,10 @@ const CreateEditSheet: FC<CreateEditSheetProps> = ({ isOpen, onClose, typeShift,
               </DialogContent>
             </Dialog>
           </div>
-          <Button className="bg-green-600 hover:bg-green-800" onClick={handleSubmit}>
+          <Button onClick={handleSubmit}>
             {typeShift ? 'Update' : 'Create'}
           </Button>
-          <Button variant={'destructive'} onClick={onClose}>
+          <Button variant={'outline'} onClick={onClose}>
             Cancel
           </Button>
         </div>

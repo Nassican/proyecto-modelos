@@ -6,6 +6,12 @@ import { IShift, INextShift, ITakeShift } from '@/interfaces/shift/shift';
 import { getAllShifts, postNextShift } from '@/services/shiftService';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { io } from 'socket.io-client';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+
+const socket = io('http://localhost:3002');
 
 function Page({ params }: { params: { id: string } }) {
   const idType = params.id;
@@ -14,7 +20,8 @@ function Page({ params }: { params: { id: string } }) {
   const [currentShift, setCurrentShift] = useState<IShift | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const idUser = 1;
+  const [caja, setCaja] = useState<number | null>(null);
+  const idUser = 2;
 
   useEffect(() => {
     fetchShifts();
@@ -24,13 +31,24 @@ function Page({ params }: { params: { id: string } }) {
   // Funcion que se encargara de enviar una señal al tv para que se sepa quien va a atender este tipo de turno
   // Por ejemplo el usuario 1 entra a la pagina, entonces el tv mostrara que el usuario 1 va a atender los turnos de tipo X
 
-  const sendSignalToTV = async () => {
-    try {
+  const handleCajaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCaja(Number(event.target.value));
+  };
+
+  const sendSignalToTV = () => {
+    if (caja !== null) {
       const userActive = idUser;
       const typeShift = idType;
-      console.log(`User ${userActive} is going to attend shifts of type ${typeShift}`);
-    } catch (error) {
-      console.error(error);
+      const data = {
+        userActive,
+        typeShift,
+        caja,
+        currentShift,
+      };
+      socket.emit('attend_shift', data);
+      console.log(`User ${userActive} is going to attend shifts of type ${typeShift} at box ${caja}`);
+    } else {
+      console.log('Caja not selected');
     }
   };
 
@@ -64,8 +82,23 @@ function Page({ params }: { params: { id: string } }) {
 
   return (
     <div className="p-4">
-      <div className="flex items-center justify-between">
-        <h1 className="mb-4 text-xl font-bold">Shifts for Type {idType}</h1>
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-xl font-bold">Shifts for Type {idType}</h1>
+        <div className="flex items-center">
+          <Label htmlFor="cajaInput" className="mr-2">
+            Caja:
+          </Label>
+          <Input
+            id="cajaInput"
+            type="number"
+            value={caja !== null ? caja : ''}
+            onChange={handleCajaChange}
+            className="border p-1"
+          />
+          <Button onClick={sendSignalToTV} className="ml-2 rounded bg-blue-500 p-2 text-white">
+            Start Shifts
+          </Button>
+        </div>
       </div>
       {currentShift ? (
         <div className="mb-6">
