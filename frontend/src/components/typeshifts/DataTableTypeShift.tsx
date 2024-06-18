@@ -23,6 +23,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ITypesShift } from '@/interfaces/typesShift/types-shift';
 import { ChevronDown, MoreHorizontal } from 'lucide-react';
 import { Badge } from '../ui/badge';
+import { getContrastColor } from '@/lib/colorFix';
 
 interface Props {
   data: ITypesShift[];
@@ -44,7 +45,7 @@ const DataTable: React.FC<Props> = ({ data, handleEdit, handleDelete, handleProp
     },
     {
       accessorKey: 'description',
-      header: 'Description2',
+      header: 'Description',
     },
     {
       accessorKey: 'code',
@@ -54,15 +55,21 @@ const DataTable: React.FC<Props> = ({ data, handleEdit, handleDelete, handleProp
       accessorKey: 'color',
       header: 'Color',
       cell: ({ row }) => (
-        <Badge style={{ backgroundColor: `#${row.original.color}`, color: 'white' }}>#{row.original.color}</Badge>
+        <Badge style={{ backgroundColor: `#${row.original.color}`, color: getContrastColor(`#${row.original.color}`) }}>#{row.original.color}</Badge>
       ),
     },
     {
       accessorKey: 'icon',
       header: 'Icon',
+      cell: ({ row }) => (
+        <div className="flex items-center">
+          <img src={row.original.icon} alt={row.original.name} className="h-6 w-6" />
+        </div>
+      ),
     },
     {
       id: 'actions',
+      header: 'Actions',
       enableHiding: false,
       cell: ({ row }) => {
         const typeShift = row.original;
@@ -103,6 +110,7 @@ const DataTable: React.FC<Props> = ({ data, handleEdit, handleDelete, handleProp
       rowSelection,
     },
   });
+
 
   return (
     <div className="w-full">

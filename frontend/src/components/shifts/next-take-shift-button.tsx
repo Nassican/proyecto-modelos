@@ -1,47 +1,37 @@
-// src/components/shifts/NextShiftButton.tsx
 import { useState } from 'react';
-import axios from '@/lib/axios';
 import { Button } from '@/components/ui/button';
 import { INextShift, IShift, ITakeShift } from '@/interfaces/shift/shift';
 import { postNextShift, postTakeShift } from '@/services/shiftService';
-import { Dialog, DialogContent, DialogTitle } from '../ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 
-const NextShiftButton = (nextShift: INextShift) => {
+interface NextShiftButtonProps {
+  nextShift: INextShift;
+  currentShift: ITakeShift;
+  onShiftCompleted: () => void; // Callback to reload shifts
+}
+
+const NextShiftButton = ({ nextShift, currentShift, onShiftCompleted }: NextShiftButtonProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [nextShiftData, setNextShiftData] = useState<IShift | null>(null);
 
-  const handleNextShift = async () => {
-    try {
-      const response = await postNextShift(nextShift);
-      setNextShiftData(response);
-      setIsModalOpen(true);
-
-      console.log('Next shift:', response);
-      // Aquí podrías actualizar el estado de la aplicación con la respuesta
-    } catch (error) {
-      console.error('Error al obtener el siguiente turno:', error);
-    }
+  const handleNextShift = () => {
+    setIsModalOpen(true);
   };
 
-  const handleTakeShift = async (takeShiftId: number) => {
+  const handleUserResponse = async (attended: boolean) => {
+    setIsModalOpen(false);
+
     const takeShift: ITakeShift = {
-      id: takeShiftId,
-      isAttended: true,
+      id: currentShift.id,
+      isAttended: attended,
     };
 
     try {
-      const response = await postTakeShift(takeShift);
-      console.log('Shift taken:', response);
-      setIsModalOpen(false);
-      setNextShiftData(null);
+      await postTakeShift(takeShift);
+      await postNextShift(nextShift);
+      onShiftCompleted(); // Reload shifts
     } catch (error) {
-      console.error('Error al tomar el turno:', error);
+      console.error('Error handling shift:', error);
     }
-  };
-
-  const handleClose = () => {
-    setIsModalOpen(false);
-    setNextShiftData(null);
   };
 
   return (
@@ -49,9 +39,13 @@ const NextShiftButton = (nextShift: INextShift) => {
       <Button onClick={handleNextShift}>Next Shift</Button>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent>
-          <DialogTitle>¿El cliente fue atendido?</DialogTitle>
-          <Button onClick={() => handleTakeShift(nextShiftData?.id ?? 0)}>Sí</Button>
-          <Button onClick={handleClose}>No</Button>
+          <DialogHeader>
+            <DialogTitle>¿El cliente fue atendido?</DialogTitle>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={() => handleUserResponse(true)}>Sí</Button>
+            <Button variant="secondary" onClick={() => handleUserResponse(false)}>No</Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>

@@ -12,7 +12,9 @@ export function Header() {
           <span className="font-semibold">Shifts Udenar</span>
         </Link>
         <Button size="sm">
-          Login
+          <Link href="/admin" prefetch={false}>
+            Login
+          </Link>
         </Button>
       </header>
     </div>
