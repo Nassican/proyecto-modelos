@@ -11,7 +11,7 @@ const handler = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/login`, {
+        const res = await axios.post(`http://api:8080/api/account/login`, {
           username: credentials?.username,
           password: credentials?.password,
           confirmPassword: credentials?.password,
