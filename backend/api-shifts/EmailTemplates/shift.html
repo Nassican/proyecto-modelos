@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shift Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .class__relative {
+            position: relative;
+        }
+        .class__absolute {
+            position: absolute;
+            top: 33rem;
+        }
+        .grid {
+            display: grid;
+            gap: 16px;
+            justify-items: center;
+            margin: 20px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-xl {
+            font-size: 1.5rem;
+        }
+        .text-3xl {
+            font-size: 1.875rem;
+        }
+        .font-bold {
+            font-weight: bold;
+        }
+        .tracking-tight {
+            letter-spacing: -0.05em;
+        }
+        .text-gray-900 {
+            color: #1a202c;
+        }
+        .dark .text-gray-50 {
+            color: #f9fafb;
+        }
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+        .border {
+            border: 1px solid #e2e8f0;
+        }
+        .bg-card {
+            background-color: #ffffff;
+        }
+        .text-card-foreground {
+            color: #2d3748;
+        }
+        .w-96 {
+            width: 24rem;
+        }
+        .flex {
+            display: flex;
+        }
+        .flex-col {
+            flex-direction: column;
+        }
+        .space-y-1-5 > * + * {
+            margin-top: 6px;
+        }
+        .p-6 {
+            padding: 1.5rem;
+        }
+        .pt-0 {
+            padding-top: 0;
+        }
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+        .text-sm {
+            font-size: 0.875rem;
+        }
+        .text-gray-500 {
+            color: #a0aec0;
+        }
+        .text-gray-700 {
+            color: #4a5568;
+        }
+        .leading-none {
+            line-height: 1;
+        }
+        .font-semibold {
+            font-weight: 600;
+        }
+        svg {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="grid gap-4">
+    <label class="text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
+        Your Shift
+    </label>
+    <div class="class__relative">
+        <div class="rounded-lg border bg-card text-card-foreground w-96 p-6">
+            <div>
+                <h3 class="text-xl font-bold">{{NumShift}}</h3>
+                <p class="text-sm text-gray-700">Shift Details</p>
+            </div>
+            <div class="mb-4">
+                <label class="text-sm leading-none font-semibold" for="clientName">Client Name:</label>
+                <p id="clientName" class="text-gray-700">{{ClientName}}</p>
+            </div>
+            <div class="mb-4">
+                <label class="text-sm leading-none font-semibold" for="studentCode">Student Code:</label>
+                <p id="studentCode" class="text-gray-700">{{StudentCode}}</p>
+            </div>
+            <div class="mb-4">
+                <label class="text-sm leading-none font-semibold" for="email">Email:</label>
+                <p id="email" class="text-gray-700">{{Email}}</p>
+            </div>
+            <div class="mb-4">
+                <label class="text-sm leading-none font-semibold" for="idTypeShift">Type Shift:</label>
+                <p id="idTypeShift" class="text-gray-700">{{TypeShift}}</p>
+            </div>
+            <div>
+                <label class="text-sm leading-none font-semibold" for="atCreated">Created At:</label>
+                <p id="atCreated" class="text-gray-700">{{CreatedAt}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
