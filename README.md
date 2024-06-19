@@ -16,7 +16,22 @@ Para desplegar el proyecto con docker-compose, primero hay que hacer una copia d
 ```
 docker-compose up --build
 ```
+Después de que los servicios estén creados ir a la ruta de la api:
+```
+localhost:8080/swagger/index.html
+```
+En esta ruta ir al endpoint Register ("api/Account/Register") y crear un usuario (username, password, email) para poder acceder al sistema.
 
+Después de haber creado un usuario puedes usar el sistema.
+
+```
+localhost:5000
+```
+
+Para ver los turnos en vivo, la ruta es:
+```
+localhost:5000/tv2
+```
 
 # Estructura del proyecto
 
