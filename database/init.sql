@@ -14,7 +14,7 @@ create table clients (
     id serial primary key,
     name varchar(256) not null,
     student_code varchar(9) not null unique,
-    email varchar(200) not null unique
+    email varchar(200) not null
 );
 
 create table types_shifts (

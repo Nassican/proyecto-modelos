@@ -37,7 +37,15 @@ public class ClientService : IClientService
     public async Task<ClientDto?> SearchByStudentAndCreate(string studentCode, string email)
     {
         var client = await _clientsRepo.GetByStudentCodeAsync(studentCode);
-        if (client != null) return client.ToClientDto();
+        if (client != null)
+        {
+            if (client.Email == email) return client.ToClientDto();
+            
+            client.Email = email;
+            await _clientsRepo.UpdateAsync(client.Id, client);
+
+            return client.ToClientDto();
+        }
         
         var student = await _externalApiService.GetStudentByCode(studentCode);
         if (student == null) return null;

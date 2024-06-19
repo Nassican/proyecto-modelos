@@ -39,11 +39,7 @@ public partial class ShiftsDbContext : DbContext
 
             entity.ToTable("clients");
 
-            entity.HasIndex(e => e.Email, "clients_email_key").IsUnique();
-
             entity.HasIndex(e => e.StudentCode, "clients_student_code_key").IsUnique();
-
-            entity.HasIndex(e => e.Email, "idx_clients_email");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Email)

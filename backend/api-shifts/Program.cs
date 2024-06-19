@@ -92,6 +92,7 @@ builder.Services.AddScoped<ITypesShiftRepository, TypesShiftRepository>();
 
 // IServices
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITypesShiftService, TypesShiftService>();

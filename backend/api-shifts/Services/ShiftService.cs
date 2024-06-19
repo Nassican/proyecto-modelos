@@ -8,14 +8,16 @@ namespace api_shifts.Services;
 public class ShiftService : IShiftService
 {
     private readonly IClientService _clientService;
-    private readonly IShiftRepository _shiftRepo;
+    private readonly IEmailService _emailService;
     private readonly INotificationService _notificationService;
+    private readonly IShiftRepository _shiftRepo;
 
-    public ShiftService(IClientService clientService, IShiftRepository shiftRepo, INotificationService notificationService)
+    public ShiftService(IClientService clientService, IShiftRepository shiftRepo, INotificationService notificationService, IEmailService emailService)
     {
         _clientService = clientService;
         _shiftRepo = shiftRepo;
         _notificationService = notificationService;
+        _emailService = emailService;
     }
 
     public async Task<IEnumerable<ShiftDto?>> GetAll()
@@ -48,12 +50,21 @@ public class ShiftService : IShiftService
         
         var shiftDtoResult = updateShiftModel?.ToShiftDto();
         
-        // Notify all clients about the next shift
-        if (shiftDtoResult != null)
-        {
-            await _notificationService.NotifyNextShiftAsync(shiftDtoResult);
-        }
+        if (shiftDtoResult == null) return null;
         
+        // Notify all clients about the next shift
+        await _notificationService.NotifyNextShiftAsync(shiftDtoResult);
+        var client = await _clientService.GetById(shiftDtoResult.IdClient);
+        if (client != null)
+        {
+            await _emailService.SendEmailAsync(
+                client.Email,
+                "Next shift",
+                $"Your shift {shiftDtoResult.NumShift} is ready"
+            );
+        }
+            
+
         return shiftDtoResult;
     }
 
@@ -76,7 +87,12 @@ public class ShiftService : IShiftService
         
         var shiftModel = shift.ToShiftFromCreate();
         var createdShiftModel = await _shiftRepo.CreateAsync(shiftModel);
-
+        await _emailService.SendEmailAsync(
+            client.Email,
+            "Shift created",
+            $"Your shift {createdShiftModel.NumShift} has been created"
+        );
+        
         return createdShiftModel?.ToShiftDto();
     }
 
