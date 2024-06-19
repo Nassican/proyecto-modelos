@@ -1,16 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { IShift } from '@/interfaces/shift/shift';
+import { ITypesShift } from '@/interfaces/typesShift/types-shift';
 import { getAllShifts } from '@/services/shiftService';
 import { getTypesShifts } from '@/services/typesShiftService';
-import { ITypesShift } from '@/interfaces/typesShift/types-shift';
-import { IShift } from '@/interfaces/shift/shift';
-import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+
 import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
+
 import { getContrastColor } from '@/lib/colorFix';
 
 function UserPage() {
@@ -112,13 +114,13 @@ function UserPage() {
                 <li key={typeShift.id}>
                   <Link href={`/admin/${typeShift.id}`} className="cursor-pointer text-lg">
                     <div
-                      className="rounded-lg border p-4 hover:shadow-md hover:border-slate-800 transition-all cursor-pointer "
+                      className="cursor-pointer rounded-lg border p-4 transition-all hover:border-slate-800 hover:shadow-md"
                       style={{
                         backgroundColor: `#${typeShift.color}`,
                         color: getContrastColor(`#${typeShift.color}`),
                       }}
                     >
-                      <div className="flex transform items-center justify-between transition-transform hover:scale-105 mx-4">
+                      <div className="mx-4 flex transform items-center justify-between transition-transform hover:scale-105">
                         <div className="grid">
                           <Label className="cursor-pointer text-lg">{typeShift.name}</Label>
                           <Label className="cursor-pointer text-sm">{getShiftCount(typeShift.id)} Total Shifts</Label>

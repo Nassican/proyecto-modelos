@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { INextShift, IShift, ITakeShift } from '@/interfaces/shift/shift';
-import { postNextShift, postTakeShift } from '@/services/shiftService';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import INextShiftButtonProps from '@/interfaces/websocket/websocket';
+import { postNextShift, postTakeShift } from '@/services/shiftService';
+import { useState } from 'react';
 
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 
 interface NextShiftButtonProps {
   nextShift: INextShift;
@@ -48,7 +48,6 @@ const NextShiftButton = ({
     };
 
     try {
-
       const data: INextShiftButtonProps = {
         place,
         setIsPlaceSelected,
@@ -65,10 +64,6 @@ const NextShiftButton = ({
     } catch (error) {
       console.error('Error handling shift:', error);
     }
-
-
-
-    
   };
 
   return (

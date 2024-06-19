@@ -1,25 +1,23 @@
-
-import axios from "axios";
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import axios from 'axios';
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 const handler = NextAuth({
   secret: process.env.SECRET,
   debug: true, // Habilita los logs de depuración
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {
-        username: { label: "Usernam", type: "text", placeholder: "Username" },
-        password: { label: "Password", type: "password" },
+        username: { label: 'Usernam', type: 'text', placeholder: 'Username' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/login`, {
           username: credentials?.username,
           password: credentials?.password,
           confirmPassword: credentials?.password,
-        }
-        )
+        });
         const user = await res.data;
         console.log(user);
 
@@ -28,7 +26,6 @@ const handler = NextAuth({
         return user;
       },
     }),
-    
   ],
   callbacks: {
     async jwt({ token, user }) {
@@ -43,8 +40,8 @@ const handler = NextAuth({
     },
   },
   pages: {
-    signIn: "/login",
-    signOut: "/",
+    signIn: '/login',
+    signOut: '/',
   },
 });
 

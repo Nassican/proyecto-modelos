@@ -13,11 +13,6 @@ io.on('connection', (socket) => {
     io.emit('attend_shift', data);
   });
 
-  socket.on('create_shift', (data) => {
-    console.log(`New shift created: ${JSON.stringify(data)}`);
-    io.emit('new_shift', data);
-  });
-
   socket.on('disconnect', () => {
     console.log('Client disconnected');
   });

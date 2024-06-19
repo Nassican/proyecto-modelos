@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { IShift } from '@/interfaces/shift/shift';
+import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:3002');
@@ -52,24 +52,62 @@ const TVPage = () => {
     };
   }, []); // Dependencia actualizada para detectar cambios en usersAttending
 
+  const renderRows = (userList: IUserAttending[]) => {
+    return userList.map((user, index) => (
+      <tr key={index}>
+        <td className="border border-gray-700 p-6 text-center">{user.currentShift?.numShift ?? 'N/A'}</td>
+        <td className="border border-gray-700 p-6 text-center">{user.place ?? 'N/A'}</td>
+      </tr>
+    ));
+  };
+
   return (
-    <div>
-      <h1>Turnos en Vivo</h1>
-      <div>
+    <div className="flex min-h-screen flex-col">
+      <header className="sticky bg-slate-300 p-6 text-center text-7xl font-bold">Turnos en Vivo</header>
+      <main>
         {usersAttending.length > 0 ? (
-          <div>
-            <h2>Usuarios Atendiendo</h2>
-            {usersAttending.map((user, index) => (
-              <div key={user.userActive} className="mb-4 rounded border p-2">
-                <p>Place: {user.place}</p>
-                <p>Shift Number: {user.currentShift ? user.currentShift.numShift : 'N/A'}</p>
+          <div className="w-full text-5xl">
+            {usersAttending.length <= 7 ? (
+              <table className="h-full w-full border-collapse text-7xl">
+                <thead className="bg-blue-200">
+                  <tr>
+                    <th className="border border-gray-700 bg-blue-500 p-6 text-white">Turno</th>
+                    <th className="border border-gray-700 bg-blue-500 p-6 text-white">Lugar</th>
+                  </tr>
+                </thead>
+                <tbody className="h-full">{renderRows(usersAttending)}</tbody>
+              </table>
+            ) : (
+              <div className="flex w-full flex-1 items-start gap-4">
+                <table className="h-full w-full border-collapse rounded-lg border text-7xl">
+                  <thead className="bg-blue-200">
+                    <tr>
+                      <th className="border border-gray-700 p-6">Turno</th>
+                      <th className="border border-gray-700 p-6">Lugar</th>
+                    </tr>
+                  </thead>
+                  <tbody className="h-full">
+                    {renderRows(usersAttending.slice(0, Math.ceil(usersAttending.length / 2)))}
+                  </tbody>
+                </table>
+                <table className="h-full w-full border-collapse text-7xl">
+                  <thead className="bg-blue-200">
+                    <tr>
+                      <th className="border border-gray-700 p-6">Turno</th>
+                      <th className="border border-gray-700 p-6">Lugar</th>
+                    </tr>
+                  </thead>
+                  <tbody className="h-full">
+                    {renderRows(usersAttending.slice(Math.ceil(usersAttending.length / 2)))}
+                  </tbody>
+                </table>
               </div>
-            ))}
+            )}
           </div>
         ) : (
-          <p>No hay usuarios atendiendo actualmente.</p>
+          <div className="mt-10 text-center text-2xl font-semibold">No hay usuarios atendiendo actualmente.</div>
         )}
-      </div>
+      </main>
     </div>
   );
 };

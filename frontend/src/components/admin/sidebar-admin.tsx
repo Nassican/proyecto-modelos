@@ -1,8 +1,9 @@
-import Link from 'next/link';
-import { Home, LogOut, Package2, SearchSlashIcon, Settings, Table, Users } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { usePathname, useRouter } from 'next/navigation';
+import { Home, LogOut, Package2, Table, Users } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export function Dashboard() {
   const currentPath = usePathname();
@@ -11,7 +12,7 @@ export function Dashboard() {
 
   const handleSignOut = async () => {
     try {
-      await signOut({redirect: false}); // Llama a signOut
+      await signOut({ redirect: false }); // Llama a signOut
       router.push('/'); // Redirige al usuario a la página de inicio después de cerrar sesión
     } catch (error) {
       console.error('Error al cerrar sesión:', error);

@@ -1,9 +1,10 @@
 // pages/typeShifts/CreateEditSheet.tsx
+import { ICreateUser, IUser } from '@/interfaces/user/user';
 import { useState, useEffect, FC, ChangeEvent } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ICreateUser, IUser } from '@/interfaces/user/user';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 interface CreateEditUserProps {
   isOpen: boolean;

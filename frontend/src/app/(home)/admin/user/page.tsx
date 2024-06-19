@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { getUser, postUser, deleteUser, getAllUsers, putUser } from '@/services/userService';
 import { IUser, ICreateUser, IUpdateUser } from '@/interfaces/user/user';
-import { Button } from '@/components/ui/button';
-
+import { postUser, deleteUser, getAllUsers, putUser } from '@/services/userService';
 import { useRouter } from 'next/navigation';
-import DataTableUser from '@/components/user/DataTableUser';
+import React, { useState, useEffect } from 'react';
+
 import CreateEditUser from '@/components/user/create-edit-user';
+import DataTableUser from '@/components/user/DataTableUser';
 
 const UserPage: React.FC = () => {
   const [users, setUsers] = useState<IUser[]>([]);

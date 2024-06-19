@@ -4,13 +4,12 @@ import { ICreateShift } from '@/interfaces/shift/shift';
 import { ITypesShift } from '@/interfaces/typesShift/types-shift';
 import { postShift } from '@/services/shiftService';
 import { useRouter } from 'next/navigation';
+import { io } from 'socket.io-client';
 
 import { Button } from '@/components/ui/button';
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-
-import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:3002');
 

@@ -1,19 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import NextShiftButton from '@/components/shifts/next-take-shift-button';
 import { IShift, INextShift, ITakeShift } from '@/interfaces/shift/shift';
-import { getAllShifts } from '@/services/shiftService';
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { io } from 'socket.io-client';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { sendSignalToTV } from '@/services/webSocketService';
 import INextShiftButtonProps from '@/interfaces/websocket/websocket';
+import { getAllShifts } from '@/services/shiftService';
+import { sendSignalToTV } from '@/services/webSocketService';
 import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 
+import NextShiftButton from '@/components/shifts/next-take-shift-button';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 
 function Page({ params }: { params: { id: string } }) {
   const idType = params.id;
@@ -49,7 +48,6 @@ function Page({ params }: { params: { id: string } }) {
       setShifts(filteredShifts);
       const current = filteredShifts.find((shift) => shift.isStandby) ?? null;
       const oneNextToCurrent = filteredShifts.find((shift) => shift.isStandby && shift.id !== current?.id) ?? null;
-      console.log('current UNA VUELTA');
 
       setCurrentShift(current || null);
       setOneNextCurrentShift(oneNextToCurrent || null);
@@ -93,7 +91,7 @@ function Page({ params }: { params: { id: string } }) {
       currentShift,
     };
     sendSignalToTV(props);
-  }
+  };
 
   if (loading) return <div>Loading...</div>;
 
@@ -156,7 +154,7 @@ function Page({ params }: { params: { id: string } }) {
       <Separator className="my-4" />
       {/* Mostrar los shifts pendientes que estan en espera */}
       <h2 className="my-4 text-xl font-bold">Pendient Shifts</h2>
-      <ul className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <ul className="grid grid-cols-2 gap-4 md:grid-cols-3">
         {shifts
           .filter((shift) => shift.isStandby)
           .map((shift) => (

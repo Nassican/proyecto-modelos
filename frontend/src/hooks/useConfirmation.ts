@@ -14,14 +14,6 @@ const useConfirmation = (isEnabled: boolean, message: string) => {
       handler(event);
     };
 
-    const handleRouteChange = (url: string) => {
-      const result = window.confirm(message);
-      if (!result) {
-        window.history.pushState(null, '', url);
-        window.dispatchEvent(new PopStateEvent('popstate'));
-      }
-    };
-
     window.addEventListener('beforeunload', handleBeforeUnload);
     window.addEventListener('hashchange', handleBeforeUnload);
     window.addEventListener('popstate', handleBeforeUnload);

@@ -1,10 +1,6 @@
-// pages/api/icons.ts
-
-
-import path from 'path';
 import fs from 'fs';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import path from 'path';
 
 interface IconItem {
   name: string;
@@ -26,13 +22,7 @@ const getIconList = (): IconItem[] => {
   return iconList;
 };
 
-
-export function GET(
-  req: NextApiRequest,
-  res: NextApiResponse<IconItem[]>
-) {
-
+export const GET = async (request: NextRequest) => {
   const iconList = getIconList();
-
   return NextResponse.json(iconList);
-}
+};

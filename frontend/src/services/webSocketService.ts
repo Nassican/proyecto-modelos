@@ -1,10 +1,8 @@
 // sendSignalToTV.ts
 
-import { useState } from 'react';
-import { io } from 'socket.io-client';
 import { IUserAttending } from '@/interfaces/user/user';
-import { IShift } from '@/interfaces/shift/shift';
 import { INextShiftButtonProps } from '@/interfaces/websocket/websocket';
+import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:3002');
 
@@ -30,4 +28,3 @@ export const sendSignalToTV = (props: INextShiftButtonProps) => {
     console.log('Place not selected');
   }
 };
-

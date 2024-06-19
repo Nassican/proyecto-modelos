@@ -3,6 +3,7 @@ import { Inter as FontSans } from 'next/font/google';
 import './globals.css';
 
 import { cn } from '@/lib/utils';
+
 import SessionAuthProvider from '@/context/SessionAuthProvider';
 
 export const metadata: Metadata = {

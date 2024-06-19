@@ -3,11 +3,10 @@
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import Link from 'next/link';
 import { Label } from '@/components/ui/label';
-
 
 const LoginForm = () => {
   const [errors, setErrors] = useState<string[]>([]);
@@ -62,7 +61,7 @@ const LoginForm = () => {
                   name="password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
-                  autoComplete='current-password'
+                  autoComplete="current-password"
                 />
               </div>
               <Button type="submit" className="w-full">
@@ -72,14 +71,14 @@ const LoginForm = () => {
           </div>
         </div>
         {errors.length > 0 && (
-        <div className="alert alert-danger mt-4">
-          <ul className="mb-0">
-            {errors.map((error) => (
-              <li key={error}>{error}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+          <div className="alert alert-danger mt-4">
+            <ul className="mb-0">
+              {errors.map((error) => (
+                <li key={error}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );

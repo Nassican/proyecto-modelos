@@ -1,10 +1,12 @@
 // pages/typeShifts/CreateEditSheet.tsx
-import { useState, useEffect, FC, ChangeEvent } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { ITypesShift } from '@/interfaces/typesShift/types-shift';
 import { Label } from '@radix-ui/react-label';
+import { useState, useEffect, FC, ChangeEvent } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 
 interface CreateEditSheetProps {
@@ -127,9 +129,7 @@ const CreateEditSheet: FC<CreateEditSheetProps> = ({ isOpen, onClose, typeShift,
               </DialogContent>
             </Dialog>
           </div>
-          <Button onClick={handleSubmit}>
-            {typeShift ? 'Update' : 'Create'}
-          </Button>
+          <Button onClick={handleSubmit}>{typeShift ? 'Update' : 'Create'}</Button>
           <Button variant={'outline'} onClick={onClose}>
             Cancel
           </Button>

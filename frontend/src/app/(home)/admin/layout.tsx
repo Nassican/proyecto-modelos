@@ -1,11 +1,12 @@
 'use client';
 
-import type { Metadata } from 'next';
+import { ChevronRight } from 'lucide-react';
 import { Inter as FontSans } from 'next/font/google';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Fragment } from 'react';
 
-import { cn } from '@/lib/utils';
 import { Dashboard } from '@/components/admin/sidebar-admin';
-
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -14,10 +15,8 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
-import { usePathname } from 'next/navigation';
-import { Fragment, useState } from 'react';
-import { ChevronRight } from 'lucide-react';
-import Link from 'next/link';
+
+import { cn } from '@/lib/utils';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -30,7 +29,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  
 
   const generateBreadcrumbs = () => {
     const segments = pathname.split('/').filter(Boolean);

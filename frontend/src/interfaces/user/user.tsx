@@ -1,4 +1,4 @@
-import { IShift } from "@/interfaces/shift/shift";
+import { IShift } from '@/interfaces/shift/shift';
 
 export interface IUser {
   id: number;
