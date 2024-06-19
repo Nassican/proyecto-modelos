@@ -7,6 +7,7 @@ public interface IShiftService
     Task<IEnumerable<ShiftDto?>> GetAll();
     Task<ShiftDto?> GetById(int id);
     Task<IEnumerable<ShiftDto?>> GetByIdTypeShift(int idTypeShift);
+    Task<IEnumerable<ShiftDto?>> GetByIdTypeShiftPending(int idTypeShift);
     Task<ShiftDto?> NextShiftByIdTypeShift(NextShiftRequestDto shiftDto);
     Task<ShiftDto?> Create(CreateShiftRequestDto shiftDto);
     Task<ShiftDto?> TakeShift(TakeShiftRequestDto shiftDto);

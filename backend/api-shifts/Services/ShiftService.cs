@@ -40,6 +40,12 @@ public class ShiftService : IShiftService
         return shifts.Select(x => x.ToShiftDto());
     }
 
+    public async Task<IEnumerable<ShiftDto?>> GetByIdTypeShiftPending(int idTypeShift)
+    {
+        var shifts = await _shiftRepo.GetByIdTypeShiftPendingAsync(idTypeShift);
+        return shifts.Select(x => x.ToShiftDto());
+    }
+
     public async Task<ShiftDto?> NextShiftByIdTypeShift(NextShiftRequestDto shiftDto)
     {
         var shiftModel = await _shiftRepo.NextShiftByIdTypeShiftAsync(shiftDto.IdTypeShift);

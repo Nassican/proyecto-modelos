@@ -7,6 +7,7 @@ public interface IShiftRepository
     Task<IEnumerable<ShiftModel>> GetAllAsync();
     Task<ShiftModel?> GetByIdAsync(int id);
     Task<IEnumerable<ShiftModel>> GetByIdTypeShiftAsync(int idTypeShift);
+    Task<IEnumerable<ShiftModel>> GetByIdTypeShiftPendingAsync(int idTypeShift);
     Task<ShiftModel?> NextShiftByIdTypeShiftAsync(int idTypeShift);
     Task<ShiftModel> CreateAsync(ShiftModel shift);
     Task<ShiftModel?> UpdateAsync(int id, ShiftModel shift);

@@ -31,6 +31,22 @@ public class ShiftController : ControllerBase
         return Ok(shift);
     }
     
+    [HttpGet("ByTypeShift/{typeShift:int}")]
+    public async Task<IActionResult> GetByTypeShift([FromRoute] int typeShift)
+    {
+        var shifts = await _shiftService.GetByIdTypeShift(typeShift);
+
+        return Ok(shifts);
+    }
+    
+    [HttpGet("ByTypeShiftPending/{typeShift:int}")]
+    public async Task<IActionResult> GetByTypeShiftPending([FromRoute] int typeShift)
+    {
+        var shifts = await _shiftService.GetByIdTypeShiftPending(typeShift);
+
+        return Ok(shifts);
+    }
+    
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateShiftRequestDto shiftDto)
     {

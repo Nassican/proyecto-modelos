@@ -33,6 +33,13 @@ public class ShiftRepository : IShiftRepository
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<ShiftModel>> GetByIdTypeShiftPendingAsync(int idTypeShift)
+    {
+        return await _context.Shifts
+            .Where(x => x.IdTypeShift == idTypeShift && x.IsStandby && x.IsActive)
+            .ToListAsync();
+    }
+
     public async Task<ShiftModel?> NextShiftByIdTypeShiftAsync(int idTypeShift)
     {
         var shift = await _context.Shifts
