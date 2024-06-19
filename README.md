@@ -12,7 +12,7 @@
 | Backend     | .NET       | Puerto 8080      |
 | Base de datos     | PostgreSQL       | Script init.sql      |
 
-Para desplegar el proyecto con docker-compose, primero hay que hacer una copia del .env.local que está en el frontend y cambiarle el nombre a .env, y el .env.examole que está en la carpeta raíz, también hacer una copia y cambiarle el nombre a .env, después hacer el siguiente comando y esperar a que los servicios estén creados:
+Para desplegar el proyecto con docker-compose, primero hay que hacer una copia del .env.local.example que está en la carpeta frontend y cambiarle el nombre a .env, y el .env.example que está en la carpeta raíz, también hacer una copia y cambiarle el nombre a .env, después hacer el siguiente comando y esperar a que los servicios estén creados:
 ```
 docker-compose up --build
 ```
