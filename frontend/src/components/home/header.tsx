@@ -12,7 +12,7 @@ export function Header() {
           <span className="font-semibold">Shifts Udenar</span>
         </Link>
         <Button size="sm">
-          <Link href="/admin" prefetch={false}>
+          <Link href="/login" prefetch={false}>
             Login
           </Link>
         </Button>

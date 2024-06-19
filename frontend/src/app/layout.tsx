@@ -3,6 +3,7 @@ import { Inter as FontSans } from 'next/font/google';
 import './globals.css';
 
 import { cn } from '@/lib/utils';
+import SessionAuthProvider from '@/context/SessionAuthProvider';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -21,7 +22,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>{children}</body>
+      <body className={cn('inter.classname min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
+        <main>
+          <SessionAuthProvider>
+            <main>{children}</main>
+          </SessionAuthProvider>
+        </main>
+      </body>
     </html>
   );
 }

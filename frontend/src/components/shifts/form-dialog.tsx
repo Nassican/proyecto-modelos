@@ -10,6 +10,10 @@ import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/c
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:3002');
+
 interface FormDialogProps {
   typesShift: ITypesShift | null;
 }
@@ -31,6 +35,7 @@ export function FormDialog({ typesShift }: FormDialogProps) {
 
     try {
       const shift = await postShift(createShift);
+      socket.emit('create_shift', shift); // Emitir evento al servidor WebSocket
       router.push(`/shift/${shift.id}`);
     } catch (error) {
       console.error(error);
@@ -62,7 +67,7 @@ export function FormDialog({ typesShift }: FormDialogProps) {
               </Label>
               <Input id="email" placeholder="test@gmail.com" className="" />
             </div>
-            <Button onClick={() => handleOnSubmit()}>Make an Shift</Button>
+            <Button onClick={handleOnSubmit}>Make an Shift</Button>
           </div>
         </div>
       </div>

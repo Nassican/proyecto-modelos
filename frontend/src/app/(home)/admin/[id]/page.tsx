@@ -12,11 +12,12 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { sendSignalToTV } from '@/services/webSocketService';
 import INextShiftButtonProps from '@/interfaces/websocket/websocket';
+import { useSession } from 'next-auth/react';
 
-const socket = io('http://localhost:3002');
 
 function Page({ params }: { params: { id: string } }) {
   const idType = params.id;
+  const { data: session } = useSession();
 
   const [shifts, setShifts] = useState<IShift[]>([]);
   const [currentShift, setCurrentShift] = useState<IShift | null>(null);
@@ -26,18 +27,20 @@ function Page({ params }: { params: { id: string } }) {
   const [isPlaceSelected, setIsPlaceSelected] = useState<boolean>(false);
   const [isOnShift, setIsOnShift] = useState<boolean>(false);
   const [oneNextCurrentShift, setOneNextCurrentShift] = useState<IShift | null>(null);
-  const idUser = 2;
+  const idUser = session?.user?.id || 0;
 
   useEffect(() => {
     fetchShifts();
     startSendSignalToTV();
+
+    const interval = setInterval(fetchShifts, 5000);
+    return () => clearInterval(interval);
   }, [idType]);
 
   const handlePlaceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setPlace(value.trim() === '' ? null : value.trim());
   };
-
 
   const fetchShifts = async () => {
     try {
@@ -46,10 +49,8 @@ function Page({ params }: { params: { id: string } }) {
       setShifts(filteredShifts);
       const current = filteredShifts.find((shift) => shift.isStandby) ?? null;
       const oneNextToCurrent = filteredShifts.find((shift) => shift.isStandby && shift.id !== current?.id) ?? null;
+      console.log('current UNA VUELTA');
 
-
-
-      
       setCurrentShift(current || null);
       setOneNextCurrentShift(oneNextToCurrent || null);
     } catch (error) {
@@ -77,14 +78,7 @@ function Page({ params }: { params: { id: string } }) {
       setIsPlaceSelected(false);
     } else {
       // Si no está en turno, marcar como en turno y enviar la señal
-      const props: INextShiftButtonProps = {
-        place,
-        setIsPlaceSelected,
-        setIsOnShift,
-        idUser,
-        idType,
-        currentShift,
-      };
+
       startSendSignalToTV();
     }
   };
