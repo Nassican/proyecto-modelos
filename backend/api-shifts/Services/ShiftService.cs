@@ -64,15 +64,14 @@ public class ShiftService : IShiftService
         await _notificationService.NotifyNextShiftAsync(shiftDtoResult);
         var client = await _clientService.GetById(shiftDtoResult.IdClient);
         
-        var body = await File.ReadAllTextAsync("../api-shifts/EmailTemplates/nextShift.html");
+        var templatePath = Path.Combine(AppContext.BaseDirectory, "EmailTemplates", "nextShift.html");
+        var body = await File.ReadAllTextAsync(templatePath);
         
         await _emailService.SendEmailAsync(
             client?.Email ?? "",
             "Next shift",
             body
         );
-
-            
 
         return shiftDtoResult;
     }
@@ -99,7 +98,8 @@ public class ShiftService : IShiftService
         
         var typesShift = await _typeShiftRepo.GetByIdAsync(shiftDto.IdTypeShift);
         
-        var body = await File.ReadAllTextAsync("../api-shifts/EmailTemplates/shift.html");
+        var templatePath = Path.Combine(AppContext.BaseDirectory, "EmailTemplates", "shift.html");
+        var body = await File.ReadAllTextAsync(templatePath);
         body = body.Replace("{{NumShift}}", createdShiftModel.NumShift);
         body = body.Replace("{{ClientName}}", client.Name);
         body = body.Replace("{{StudentCode}}", client.StudentCode);
