@@ -3,8 +3,6 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 const handler = NextAuth({
-  secret: process.env.NEXT_PUBLIC_SECRET,
-  debug: true, // Habilita los logs de depuración
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -41,6 +39,7 @@ const handler = NextAuth({
       return `${baseUrl}/admin`; // Redirigir a la ruta específica después de iniciar sesión
     },
   },
+  secret: process.env.NEXTAUTH_SECRET, // Utilizado para cifrar cookies
   pages: {
     signIn: '/login',
     signOut: '/',

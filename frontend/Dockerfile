@@ -29,6 +29,7 @@ COPY --from=BUILD_IMAGE /app/node_modules ./node_modules
 
 # Configurar la variable de entorno
 ENV NODE_ENV=production
+ENV NEXTAUTH_SECRET=secret
 
 # Exponer el puerto 3000
 EXPOSE 5000
