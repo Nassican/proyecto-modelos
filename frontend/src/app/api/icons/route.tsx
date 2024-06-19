@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import path from 'path';
 
 interface IconItem {
@@ -22,7 +22,7 @@ const getIconList = (): IconItem[] => {
   return iconList;
 };
 
-export const GET = async (request: NextRequest) => {
+export const GET = async () => {
   const iconList = getIconList();
   return NextResponse.json(iconList);
 };
