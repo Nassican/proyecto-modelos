@@ -1,10 +1,12 @@
 // pages/typeShifts/CreateEditSheet.tsx
-import { useState, useEffect, FC, ChangeEvent } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { ITypesShift } from '@/interfaces/typesShift/types-shift';
 import { Label } from '@radix-ui/react-label';
+import { useState, useEffect, FC, ChangeEvent } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 
 interface CreateEditSheetProps {
@@ -34,7 +36,7 @@ const CreateEditSheet: FC<CreateEditSheetProps> = ({ isOpen, onClose, typeShift,
     try {
       const res = await fetch('/api/icons');
       const data = await res.json();
-      console.log(data);
+      //console.log(data);
       setIconList(data);
     } catch (error) {
       console.error('Error fetching icon list:', error);
@@ -127,10 +129,8 @@ const CreateEditSheet: FC<CreateEditSheetProps> = ({ isOpen, onClose, typeShift,
               </DialogContent>
             </Dialog>
           </div>
-          <Button className="bg-green-600 hover:bg-green-800" onClick={handleSubmit}>
-            {typeShift ? 'Update' : 'Create'}
-          </Button>
-          <Button variant={'destructive'} onClick={onClose}>
+          <Button onClick={handleSubmit}>{typeShift ? 'Update' : 'Create'}</Button>
+          <Button variant={'outline'} onClick={onClose}>
             Cancel
           </Button>
         </div>

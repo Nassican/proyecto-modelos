@@ -7,10 +7,10 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 
+import { getContrastColor } from '@/lib/colorFix';
 import { cn } from '@/lib/utils';
 
 import { FormDialog } from './form-dialog';
-import { getContrastColor } from '@/lib/colorFix';
 
 export function ButtonsGrid() {
   const [shifts, setShifts] = useState<ITypesShift[]>([]);
@@ -39,7 +39,7 @@ export function ButtonsGrid() {
   if (!shifts.length) return <div>Loading...</div>;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+    <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
       {shifts.map((shift) => (
         <Dialog key={shift.id}>
           <DialogTrigger asChild>

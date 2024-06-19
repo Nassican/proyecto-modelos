@@ -26,9 +26,9 @@ export const deleteShift = async (id: number) => {
 export const postNextShift = async (nextShift: INextShift) => {
   const response = await axios.post<IShift>(`${API_BASE_URL}/shift/nextshift`, nextShift);
   return response.data;
-}
+};
 
 export const postTakeShift = async (takeShift: ITakeShift) => {
   const response = await axios.post<IShift>(`${API_BASE_URL}/shift/takeshift`, takeShift);
   return response.data;
-}
+};

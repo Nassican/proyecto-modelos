@@ -1,4 +1,4 @@
-import React from 'react';
+import { ITypesShift } from '@/interfaces/typesShift/types-shift';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,6 +11,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { MoreHorizontal } from 'lucide-react';
+import React from 'react';
+
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -20,10 +23,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ITypesShift } from '@/interfaces/typesShift/types-shift';
-import { ChevronDown, MoreHorizontal } from 'lucide-react';
-import { Badge } from '../ui/badge';
+
 import { getContrastColor } from '@/lib/colorFix';
+
+import { Badge } from '../ui/badge';
 
 interface Props {
   data: ITypesShift[];
@@ -55,7 +58,9 @@ const DataTable: React.FC<Props> = ({ data, handleEdit, handleDelete, handleProp
       accessorKey: 'color',
       header: 'Color',
       cell: ({ row }) => (
-        <Badge style={{ backgroundColor: `#${row.original.color}`, color: getContrastColor(`#${row.original.color}`) }}>#{row.original.color}</Badge>
+        <Badge style={{ backgroundColor: `#${row.original.color}`, color: getContrastColor(`#${row.original.color}`) }}>
+          #{row.original.color}
+        </Badge>
       ),
     },
     {
@@ -110,7 +115,6 @@ const DataTable: React.FC<Props> = ({ data, handleEdit, handleDelete, handleProp
       rowSelection,
     },
   });
-
 
   return (
     <div className="w-full">

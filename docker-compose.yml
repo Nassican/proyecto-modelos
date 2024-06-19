@@ -53,6 +53,17 @@ services:
       - app-network
     depends_on:
       - api
+
+  socketserver:
+    build:
+      context: ./socketServer
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"  # Ajusta el puerto según tu configuración
+    networks:
+      - app-network
+    depends_on:
+      - api
   
 
 volumes:

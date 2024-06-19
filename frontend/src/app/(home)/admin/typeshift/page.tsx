@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { getTypesShifts, putTypesShifts, postTypesShifts, deleteTypesShifts } from '@/services/typesShiftService';
 import { ITypesShift } from '@/interfaces/typesShift/types-shift';
-import DataTable from '@/components/typeshifts/DataTableTypeShift';
-import CreateEditSheet from '@/components/typeshifts/create-edit-typeshift';
+import { getTypesShifts, putTypesShifts, postTypesShifts, deleteTypesShifts } from '@/services/typesShiftService';
 import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+
+import CreateEditSheet from '@/components/typeshifts/create-edit-typeshift';
+import DataTable from '@/components/typeshifts/DataTableTypeShift';
 
 const TypeShiftPage: React.FC = () => {
   const [typeShifts, setTypeShifts] = useState<ITypesShift[]>([]);

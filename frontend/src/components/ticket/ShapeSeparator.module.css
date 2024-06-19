@@ -10,7 +10,6 @@
   height: 100%; /* Ajusta el SVG al alto completo del contenedor */
   width: 100%; /* Ajusta el SVG al ancho completo del contenedor */
   filter: drop-shadow(0 8px 4px rgba(0, 0, 0, 0.2)); /* Sombra */
-  
 }
 
 .shapeSeparator path {

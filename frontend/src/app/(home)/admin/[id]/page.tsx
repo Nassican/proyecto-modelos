@@ -1,37 +1,44 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import NextShiftButton from '@/components/shifts/next-take-shift-button';
 import { IShift, INextShift, ITakeShift } from '@/interfaces/shift/shift';
-import { getAllShifts, postNextShift } from '@/services/shiftService';
+import INextShiftButtonProps from '@/interfaces/websocket/websocket';
+import { getAllShifts } from '@/services/shiftService';
+import { sendSignalToTV } from '@/services/webSocketService';
+import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+
+import NextShiftButton from '@/components/shifts/next-take-shift-button';
+import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 
 function Page({ params }: { params: { id: string } }) {
   const idType = params.id;
+  const { data: session } = useSession();
 
   const [shifts, setShifts] = useState<IShift[]>([]);
   const [currentShift, setCurrentShift] = useState<IShift | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const idUser = 1;
+  const [place, setPlace] = useState<string | null>(null);
+  const [isPlaceSelected, setIsPlaceSelected] = useState<boolean>(false);
+  const [isOnShift, setIsOnShift] = useState<boolean>(false);
+  const [oneNextCurrentShift, setOneNextCurrentShift] = useState<IShift | null>(null);
+  const idUser = session?.user?.id || 0;
 
   useEffect(() => {
     fetchShifts();
-    sendSignalToTV();
+    startSendSignalToTV();
+
+    const interval = setInterval(fetchShifts, 5000);
+    return () => clearInterval(interval);
   }, [idType]);
 
-  // Funcion que se encargara de enviar una señal al tv para que se sepa quien va a atender este tipo de turno
-  // Por ejemplo el usuario 1 entra a la pagina, entonces el tv mostrara que el usuario 1 va a atender los turnos de tipo X
-
-  const sendSignalToTV = async () => {
-    try {
-      const userActive = idUser;
-      const typeShift = idType;
-      console.log(`User ${userActive} is going to attend shifts of type ${typeShift}`);
-    } catch (error) {
-      console.error(error);
-    }
+  const handlePlaceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setPlace(value.trim() === '' ? null : value.trim());
   };
 
   const fetchShifts = async () => {
@@ -39,9 +46,11 @@ function Page({ params }: { params: { id: string } }) {
       const allShifts = await getAllShifts();
       const filteredShifts = allShifts.filter((shift) => shift.idTypeShift === Number(idType));
       setShifts(filteredShifts);
-      const current = filteredShifts.find((shift) => shift.isStandby);
+      const current = filteredShifts.find((shift) => shift.isStandby) ?? null;
+      const oneNextToCurrent = filteredShifts.find((shift) => shift.isStandby && shift.id !== current?.id) ?? null;
 
       setCurrentShift(current || null);
+      setOneNextCurrentShift(oneNextToCurrent || null);
     } catch (error) {
       console.error(error);
       setError('Failed to fetch shifts.');
@@ -60,37 +69,80 @@ function Page({ params }: { params: { id: string } }) {
     isAttended: false, // Esto se actualizará según la respuesta del usuario
   };
 
+  const handleShiftButtonClick = () => {
+    if (isOnShift) {
+      // Si está en turno, marcar como fuera de turno y permitir editar la caja
+      setIsOnShift(false);
+      setIsPlaceSelected(false);
+    } else {
+      // Si no está en turno, marcar como en turno y enviar la señal
+
+      startSendSignalToTV();
+    }
+  };
+
+  const startSendSignalToTV = () => {
+    const props: INextShiftButtonProps = {
+      place,
+      setIsPlaceSelected,
+      setIsOnShift,
+      idUser,
+      idType,
+      currentShift,
+    };
+    sendSignalToTV(props);
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
     <div className="p-4">
-      <div className="flex items-center justify-between">
-        <h1 className="mb-4 text-xl font-bold">Shifts for Type {idType}</h1>
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-xl font-bold">Shifts for Type {idType}</h1>
+        <div className="flex items-center">
+          <Label htmlFor="placeInput" className="mr-2">
+            Place:
+          </Label>
+          <Input
+            id="placeInput"
+            value={place !== null ? place : ''}
+            onChange={handlePlaceChange}
+            className="border p-1"
+            disabled={isOnShift}
+          />
+          <Button onClick={handleShiftButtonClick} className="ml-2 rounded bg-blue-500 p-2 text-white">
+            {isOnShift ? 'Change Place' : 'Start Shift'}
+          </Button>
+        </div>
       </div>
       {currentShift ? (
         <div className="mb-6">
-          <h2 className="text-lg font-semibold">Current Shift</h2>
-          <Card className="mb-4 p-4">
+          <h2 className="text-xl font-bold">Current Shift</h2>
+          <Card className="mb-4">
             <CardHeader>
               <CardTitle>Shift Number: {currentShift.numShift}</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription>Is Attended: {currentShift.isAttended ? 'Yes' : 'No'}</CardDescription>
               <CardDescription>Is Standby: {currentShift.isStandby ? 'Yes' : 'No'}</CardDescription>
-              <CardDescription>Date Attended: {currentShift.dateAttended}</CardDescription>
             </CardContent>
           </Card>
           <NextShiftButton
             nextShift={interfaceNextShift}
             currentShift={interfaceTakeShift}
-            onShiftCompleted={() => {
-              fetchShifts();
-              sendSignalToTV();
-            }}
+            onShiftCompleted={fetchShifts}
+            sendSignalToTV={sendSignalToTV}
+            isPlaceSelected={!isPlaceSelected}
+            place={place}
+            setIsPlaceSelected={setIsPlaceSelected}
+            setIsOnShift={setIsOnShift}
+            idUser={idUser}
+            idType={idType}
+            currentShiftToSocket={oneNextCurrentShift}
           />
         </div>
       ) : (
-        <Card className="mb-4 p-4">
+        <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-center">No current shift</CardTitle>
           </CardHeader>
@@ -102,24 +154,18 @@ function Page({ params }: { params: { id: string } }) {
       <Separator className="my-4" />
       {/* Mostrar los shifts pendientes que estan en espera */}
       <h2 className="my-4 text-xl font-bold">Pendient Shifts</h2>
-      <ul className="grid grid-cols-2 gap-4">
+      <ul className="grid grid-cols-2 gap-4 md:grid-cols-3">
         {shifts
           .filter((shift) => shift.isStandby)
           .map((shift) => (
-            <Card key={shift.id} className="p-4">
+            <Card key={shift.id} className="">
               <CardHeader>
-                <CardTitle>Shift Number: {shift.numShift}</CardTitle>
+                <CardTitle>{shift.numShift}</CardTitle>
               </CardHeader>
-              <CardContent>
-                <CardDescription>Is Attended: {shift.isAttended ? 'Yes' : 'No'}</CardDescription>
-                <CardDescription>Is Standby: {shift.isStandby ? 'Yes' : 'No'}</CardDescription>
-                <CardDescription>Date Attended: {shift.dateAttended}</CardDescription>
-              </CardContent>
             </Card>
           ))}
       </ul>
       <div>
-        {/* Colocar una alerta de que nohay sdhift pendientes */}
         {shifts.filter((shift) => shift.isStandby).length === 0 && (
           <Card className="p-4">
             <CardHeader>
@@ -132,7 +178,7 @@ function Page({ params }: { params: { id: string } }) {
         )}
       </div>
 
-      <Separator className="my-4 mt-8" />
+      {/* <Separator className="my-4 mt-8" />
       <h2 className="my-4 text-xl font-bold">All Shifts</h2>
       <ul className="grid grid-cols-2 gap-4">
         {shifts.map((shift) => (
@@ -147,7 +193,7 @@ function Page({ params }: { params: { id: string } }) {
             </CardContent>
           </Card>
         ))}
-      </ul>
+      </ul> */}
       {error && <p className="mt-4 text-red-500">{error}</p>}
     </div>
   );
