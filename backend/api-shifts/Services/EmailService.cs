@@ -1,5 +1,7 @@
 using System.Net;
 using System.Net.Mail;
+using System.Net.Mime;
+using System.Text;
 using api_shifts.Interfaces.IServices;
 
 namespace api_shifts.Services;
@@ -28,14 +30,16 @@ public class EmailService : IEmailService
             var addressTo = new MailAddress(to);
             var mailMessage = new MailMessage(addressFrom, addressTo);
             mailMessage.Subject = subject;
-            mailMessage.IsBodyHtml = false;
-            mailMessage.Body = body;
+            
+            var htmlView = AlternateView.CreateAlternateViewFromString(body, Encoding.UTF8, MediaTypeNames.Text.Html);
+            mailMessage.AlternateViews.Add(htmlView);
             
             await _smtpClient.SendMailAsync(mailMessage);
         }
-        catch (Exception _)
+        catch (Exception ex)
         {
             // ignored
+            Console.WriteLine(ex.Message);
         }
     }
 }

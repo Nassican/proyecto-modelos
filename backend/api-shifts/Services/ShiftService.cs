@@ -11,13 +11,15 @@ public class ShiftService : IShiftService
     private readonly IEmailService _emailService;
     private readonly INotificationService _notificationService;
     private readonly IShiftRepository _shiftRepo;
+    private readonly ITypesShiftRepository _typeShiftRepo;
 
-    public ShiftService(IClientService clientService, IShiftRepository shiftRepo, INotificationService notificationService, IEmailService emailService)
+    public ShiftService(IClientService clientService, IShiftRepository shiftRepo, INotificationService notificationService, IEmailService emailService, ITypesShiftRepository typeShiftRepo)
     {
         _clientService = clientService;
         _shiftRepo = shiftRepo;
         _notificationService = notificationService;
         _emailService = emailService;
+        _typeShiftRepo = typeShiftRepo;
     }
 
     public async Task<IEnumerable<ShiftDto?>> GetAll()
@@ -55,14 +57,15 @@ public class ShiftService : IShiftService
         // Notify all clients about the next shift
         await _notificationService.NotifyNextShiftAsync(shiftDtoResult);
         var client = await _clientService.GetById(shiftDtoResult.IdClient);
-        if (client != null)
-        {
-            await _emailService.SendEmailAsync(
-                client.Email,
-                "Next shift",
-                $"Your shift {shiftDtoResult.NumShift} is ready"
-            );
-        }
+        
+        var body = await File.ReadAllTextAsync("../api-shifts/EmailTemplates/nextShift.html");
+        
+        await _emailService.SendEmailAsync(
+            client?.Email ?? "",
+            "Next shift",
+            body
+        );
+
             
 
         return shiftDtoResult;
@@ -87,10 +90,20 @@ public class ShiftService : IShiftService
         
         var shiftModel = shift.ToShiftFromCreate();
         var createdShiftModel = await _shiftRepo.CreateAsync(shiftModel);
+        
+        var typesShift = await _typeShiftRepo.GetByIdAsync(shiftDto.IdTypeShift);
+        
+        var body = await File.ReadAllTextAsync("../api-shifts/EmailTemplates/shift.html");
+        body = body.Replace("{{ClientName}}", client.Name);
+        body = body.Replace("{{StudentCode}}", client.StudentCode);
+        body = body.Replace("{{Email}}", client.Email);
+        body = body.Replace("{{TypeShift}}", typesShift?.Name ?? "Unknown");
+        body = body.Replace("{{CreatedAt}}", createdShiftModel.AtCreated.ToString("dd/MM/yyyy HH:mm"));
+        
         await _emailService.SendEmailAsync(
             client.Email,
             "Shift created",
-            $"Your shift {createdShiftModel.NumShift} has been created"
+            body
         );
         
         return createdShiftModel?.ToShiftDto();
