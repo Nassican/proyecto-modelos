@@ -3,7 +3,7 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 const handler = NextAuth({
-  secret: process.env.SECRET,
+  secret: process.env.NEXT_PUBLIC_SECRET,
   debug: true, // Habilita los logs de depuración
   providers: [
     CredentialsProvider({
@@ -32,10 +32,12 @@ const handler = NextAuth({
       return { ...token, ...user };
     },
     async session({ session, token }) {
+      // desactivar regla de eslint
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       session.user = token as any;
       return session;
     },
-    async redirect({ url, baseUrl }) {
+    async redirect({ baseUrl }) {
       return `${baseUrl}/admin`; // Redirigir a la ruta específica después de iniciar sesión
     },
   },

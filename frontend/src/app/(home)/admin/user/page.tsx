@@ -2,7 +2,6 @@
 
 import { IUser, ICreateUser, IUpdateUser } from '@/interfaces/user/user';
 import { postUser, deleteUser, getAllUsers, putUser } from '@/services/userService';
-import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
 import CreateEditUser from '@/components/user/create-edit-user';
@@ -13,7 +12,6 @@ const UserPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState<IUser | null>(null);
   const [isOpen, setIsOpen] = useState(false); // Estado para controlar si la hoja está abierta
-  const router = useRouter();
 
   useEffect(() => {
     fetchUsers();

@@ -12,7 +12,7 @@ const TypeShiftPage: React.FC = () => {
   const [typeShifts, setTypeShifts] = useState<ITypesShift[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingTypeShift, setEditingTypeShift] = useState<ITypesShift | null>(null);
-  const [newTypeShift, setNewTypeShift] = useState<Partial<ITypesShift>>({});
+  const [, setNewTypeShift] = useState<Partial<ITypesShift>>({});
   const [isOpen, setIsOpen] = useState(false); // Estado para controlar si la hoja está abierta
   const [iconList, setIconList] = useState<{ name: string; url: string }[]>([]);
 
