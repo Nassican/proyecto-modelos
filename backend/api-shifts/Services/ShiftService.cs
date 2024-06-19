@@ -63,9 +63,8 @@ public class ShiftService : IShiftService
         // Notify all clients about the next shift
         await _notificationService.NotifyNextShiftAsync(shiftDtoResult);
         var client = await _clientService.GetById(shiftDtoResult.IdClient);
-        
-        var templatePath = Path.Combine(AppContext.BaseDirectory, "EmailTemplates", "nextShift.html");
-        var body = await File.ReadAllTextAsync(templatePath);
+
+        const string body = """<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport"content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>Next Shift</title><style>body {font-family: Arial, sans-serif;background-color: #f0f8ff;color: #333;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}.container {text-align: center;padding: 20px;background-color: #fff;border: 1px solid #ccc;border-radius: 10px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}.title {font-size: 2rem;font-weight: bold;color: #2c3e50;}.message {font-size: 1.25rem;margin-top: 10px;color: #34495e;}</style></head><body><div class="container"><div class="title">Shift Reminder</div><div class="message">It's time for your shift! Please prepare yourself and head to your designated area.</div></div></body></html>""";
         
         await _emailService.SendEmailAsync(
             client?.Email ?? "",
@@ -98,8 +97,8 @@ public class ShiftService : IShiftService
         
         var typesShift = await _typeShiftRepo.GetByIdAsync(shiftDto.IdTypeShift);
         
-        var templatePath = Path.Combine(AppContext.BaseDirectory, "EmailTemplates", "shift.html");
-        var body = await File.ReadAllTextAsync(templatePath);
+        var body = """<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Shift Details</title><style>body {font-family: Arial, sans-serif;background-color: #f9f9f9;color: #333;}.class__relative {position: relative;}.class__absolute {position: absolute;top: 33rem;}.grid {display: grid;gap: 16px;justify-items: center;margin: 20px;}.text-center {text-align: center;}.text-xl {font-size: 1.5rem;}.text-3xl {font-size: 1.875rem;}.font-bold {font-weight: bold;}.tracking-tight {letter-spacing: -0.05em;}.text-gray-900 {color: #1a202c;}.dark .text-gray-50 {color: #f9fafb;}.rounded-lg {border-radius: 0.5rem;}.border {border: 1px solid #e2e8f0;}.bg-card {background-color: #ffffff;}.text-card-foreground {color: #2d3748;}.w-96 {width: 24rem;}.flex {display: flex;}.flex-col {flex-direction: column;}.space-y-1-5 > * + * {margin-top: 6px;}.p-6 {padding: 1.5rem;}.pt-0 {padding-top: 0;}.mb-4 {margin-bottom: 1rem;}.text-sm {font-size: 0.875rem;}.text-gray-500 {color: #a0aec0;}.text-gray-700 {color: #4a5568;}.leading-none {line-height: 1;}.font-semibold {font-weight: 600;}svg {width: 100%;height: auto;}</style></head><body><div class="grid gap-4"><label class="text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50">Your Shift</label><div class="class__relative"><div class="rounded-lg border bg-card text-card-foreground w-96 p-6"><div><h3 class="text-xl font-bold">{{NumShift}}</h3><p class="text-sm text-gray-700">Shift Details</p></div><div class="mb-4"><label class="text-sm leading-none font-semibold" for="clientName">Client Name:</label><p id="clientName" class="text-gray-700">{{ClientName}}</p></div><div class="mb-4"><label class="text-sm leading-none font-semibold" for="studentCode">Student Code:</label><p id="studentCode" class="text-gray-700">{{StudentCode}}</p></div><div class="mb-4"><label class="text-sm leading-none font-semibold" for="email">Email:</label><p id="email" class="text-gray-700">{{Email}}</p></div><div class="mb-4"><label class="text-sm leading-none font-semibold" for="idTypeShift">Type Shift:</label><p id="idTypeShift" class="text-gray-700">{{TypeShift}}</p></div><div><label class="text-sm leading-none font-semibold" for="atCreated">Created At:</label><p id="atCreated" class="text-gray-700">{{CreatedAt}}</p></div></div></div></div></body></html>""";
+        
         body = body.Replace("{{NumShift}}", createdShiftModel.NumShift);
         body = body.Replace("{{ClientName}}", client.Name);
         body = body.Replace("{{StudentCode}}", client.StudentCode);
